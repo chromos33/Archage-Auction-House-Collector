@@ -10,7 +10,7 @@ namespace Archage_Auction_House_Collector
     {
         public Item(String _itemName,int _copperBuyoutPrice,int _copperBidPrice,int _amount)
         {
-            itemName            = _itemName;
+            itemName            = _itemName.ToLower().Replace(' ','_');
             copperBuyoutPrice   = _copperBuyoutPrice;
             copperBidPrice      = _copperBidPrice;
             amount              = _amount;
