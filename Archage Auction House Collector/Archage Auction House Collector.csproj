@@ -115,6 +115,7 @@
     <Compile Include="AHCollector.Designer.cs">
       <DependentUpon>AHCollector.cs</DependentUpon>
     </Compile>
+    <Compile Include="AuctionItem.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

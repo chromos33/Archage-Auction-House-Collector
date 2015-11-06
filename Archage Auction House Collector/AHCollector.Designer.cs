@@ -43,18 +43,25 @@ namespace Archage_Auction_House_Collector
             this.MeasurementLabel = new System.Windows.Forms.Label();
             this.Tabs = new System.Windows.Forms.TabControl();
             this.DataEntry = new System.Windows.Forms.TabPage();
+            this.ItemNameComboBox = new System.Windows.Forms.ComboBox();
             this.DataExploration = new System.Windows.Forms.TabPage();
+            this.updatechart = new System.Windows.Forms.Button();
             this.Chartbrowser = new System.Windows.Forms.WebBrowser();
             this.timespanlabel = new System.Windows.Forms.Label();
             this.timespanselect = new System.Windows.Forms.ComboBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.Asume = new System.Windows.Forms.CheckBox();
+            this.PointTab = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
+            this.TimeStampList = new System.Windows.Forms.CheckedListBox();
+            this.MeasurementCorection = new System.Windows.Forms.ComboBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.updatechart = new System.Windows.Forms.Button();
+            this.deletepoint = new System.Windows.Forms.Button();
             this.Tabs.SuspendLayout();
             this.DataEntry.SuspendLayout();
             this.DataExploration.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.PointTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // ItemNameLabel
@@ -154,6 +161,7 @@ namespace Archage_Auction_House_Collector
             this.Tabs.Controls.Add(this.DataEntry);
             this.Tabs.Controls.Add(this.DataExploration);
             this.Tabs.Controls.Add(this.tabPage1);
+            this.Tabs.Controls.Add(this.PointTab);
             this.Tabs.Location = new System.Drawing.Point(-2, -1);
             this.Tabs.Name = "Tabs";
             this.Tabs.SelectedIndex = 0;
@@ -162,6 +170,7 @@ namespace Archage_Auction_House_Collector
             // 
             // DataEntry
             // 
+            this.DataEntry.Controls.Add(this.ItemNameComboBox);
             this.DataEntry.Controls.Add(this.ItemNameLabel);
             this.DataEntry.Controls.Add(this.Save_btn);
             this.DataEntry.Controls.Add(this.ItemName);
@@ -179,6 +188,14 @@ namespace Archage_Auction_House_Collector
             this.DataEntry.Text = "Data entry";
             this.DataEntry.UseVisualStyleBackColor = true;
             // 
+            // ItemNameComboBox
+            // 
+            this.ItemNameComboBox.FormattingEnabled = true;
+            this.ItemNameComboBox.Location = new System.Drawing.Point(6, 45);
+            this.ItemNameComboBox.Name = "ItemNameComboBox";
+            this.ItemNameComboBox.Size = new System.Drawing.Size(147, 21);
+            this.ItemNameComboBox.TabIndex = 9;
+            // 
             // DataExploration
             // 
             this.DataExploration.Controls.Add(this.updatechart);
@@ -194,6 +211,17 @@ namespace Archage_Auction_House_Collector
             this.DataExploration.TabIndex = 1;
             this.DataExploration.Text = "Data exploration";
             this.DataExploration.UseVisualStyleBackColor = true;
+            this.DataExploration.Click += new System.EventHandler(this.DataExploration_Click);
+            // 
+            // updatechart
+            // 
+            this.updatechart.Location = new System.Drawing.Point(10, 108);
+            this.updatechart.Name = "updatechart";
+            this.updatechart.Size = new System.Drawing.Size(120, 23);
+            this.updatechart.TabIndex = 15;
+            this.updatechart.Text = "Update Chart";
+            this.updatechart.UseVisualStyleBackColor = true;
+            this.updatechart.Click += new System.EventHandler(this.updatechart_Click);
             // 
             // Chartbrowser
             // 
@@ -246,15 +274,55 @@ namespace Archage_Auction_House_Collector
             this.Asume.Text = "assume 1 if Amount not specified?";
             this.Asume.UseVisualStyleBackColor = true;
             // 
-            // updatechart
+            // PointTab
             // 
-            this.updatechart.Location = new System.Drawing.Point(10, 108);
-            this.updatechart.Name = "updatechart";
-            this.updatechart.Size = new System.Drawing.Size(120, 23);
-            this.updatechart.TabIndex = 15;
-            this.updatechart.Text = "Update Chart";
-            this.updatechart.UseVisualStyleBackColor = true;
-            this.updatechart.Click += new System.EventHandler(this.updatechart_Click);
+            this.PointTab.Controls.Add(this.deletepoint);
+            this.PointTab.Controls.Add(this.label1);
+            this.PointTab.Controls.Add(this.TimeStampList);
+            this.PointTab.Controls.Add(this.MeasurementCorection);
+            this.PointTab.Location = new System.Drawing.Point(4, 22);
+            this.PointTab.Name = "PointTab";
+            this.PointTab.Padding = new System.Windows.Forms.Padding(3);
+            this.PointTab.Size = new System.Drawing.Size(1019, 506);
+            this.PointTab.TabIndex = 3;
+            this.PointTab.Text = "Point Correction";
+            this.PointTab.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(32, 17);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(70, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Item Auswahl";
+            // 
+            // TimeStampList
+            // 
+            this.TimeStampList.FormattingEnabled = true;
+            this.TimeStampList.Location = new System.Drawing.Point(208, 33);
+            this.TimeStampList.Name = "TimeStampList";
+            this.TimeStampList.Size = new System.Drawing.Size(399, 439);
+            this.TimeStampList.TabIndex = 2;
+            // 
+            // MeasurementCorection
+            // 
+            this.MeasurementCorection.FormattingEnabled = true;
+            this.MeasurementCorection.Location = new System.Drawing.Point(35, 33);
+            this.MeasurementCorection.Name = "MeasurementCorection";
+            this.MeasurementCorection.Size = new System.Drawing.Size(121, 21);
+            this.MeasurementCorection.TabIndex = 0;
+            this.MeasurementCorection.SelectedIndexChanged += new System.EventHandler(this.MeasurementCorection_SelectedIndexChanged);
+            // 
+            // deletepoint
+            // 
+            this.deletepoint.Location = new System.Drawing.Point(35, 433);
+            this.deletepoint.Name = "deletepoint";
+            this.deletepoint.Size = new System.Drawing.Size(146, 39);
+            this.deletepoint.TabIndex = 4;
+            this.deletepoint.Text = "Delete Point";
+            this.deletepoint.UseVisualStyleBackColor = true;
+            this.deletepoint.Click += new System.EventHandler(this.deletepoint_Click);
             // 
             // Archage_AH_DataCollector
             // 
@@ -272,6 +340,8 @@ namespace Archage_Auction_House_Collector
             this.DataExploration.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.PointTab.ResumeLayout(false);
+            this.PointTab.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -299,6 +369,12 @@ namespace Archage_Auction_House_Collector
         private System.Windows.Forms.CheckBox Asume;
         private System.Windows.Forms.WebBrowser Chartbrowser;
         private System.Windows.Forms.Button updatechart;
+        private System.Windows.Forms.ComboBox ItemNameComboBox;
+        private System.Windows.Forms.TabPage PointTab;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckedListBox TimeStampList;
+        private System.Windows.Forms.ComboBox MeasurementCorection;
+        private System.Windows.Forms.Button deletepoint;
     }
 }
 

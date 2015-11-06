@@ -8,12 +8,13 @@ namespace Archage_Auction_House_Collector
 {
     public class Item
     {
-        public Item(String _itemName,int _copperBuyoutPrice,int _copperBidPrice,int _amount)
+        // DISCONTINUED
+        public Item(String _itemName, int _copperBuyoutPrice, int _copperBidPrice, int _amount)
         {
-            itemName            = _itemName.ToLower().Replace(' ','_');
-            copperBuyoutPrice   = _copperBuyoutPrice;
-            copperBidPrice      = _copperBidPrice;
-            amount              = _amount;
+            itemName = _itemName.ToLower().Replace(' ', '_');
+            copperBuyoutPrice = _copperBuyoutPrice;
+            copperBidPrice = _copperBidPrice;
+            amount = _amount;
         }
         private int timeStamp;
         private String itemName;
