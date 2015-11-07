@@ -25,31 +25,6 @@ namespace Archage_Auction_House_Collector
             InitializeComponent();
             path = Directory.GetCurrentDirectory() + "\\ItemDB.db";
             DB = new LiteDatabase(@path);
-            newpath = Directory.GetCurrentDirectory() + "\\ItemDBv2.db";
-            newDB = new LiteDatabase(@newpath);
-            //RenewDB();
-        }
-        private void RenewDB()
-        {
-            var collectionNames = DB.GetCollectionNames();
-            int i = 0;
-            foreach (var name in collectionNames)
-            {
-                var collection = DB.GetCollection<Item>(name);
-                var result = collection.Find(Query.All());
-                foreach (var item in result)
-                {
-
-                    AuctionItem insert = new AuctionItem();
-                    insert.BidPrice = Convert.ToInt32(item.CopperBidPrice / item.Amount);
-                    insert.BuyoutPrice = Convert.ToInt32(item.CopperBuyoutPrice / item.Amount);
-                    insert.itemName = item.ItemName;
-                    insert.TimeStamp = item.TimeStamp;
-
-                    var colnewDB = newDB.GetCollection<AuctionItem>(insert.itemName);
-                    colnewDB.Insert(insert);
-                }
-            }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -79,7 +54,6 @@ namespace Archage_Auction_House_Collector
             }
             int Bid = 0;
             int Buyout = 0;
-            int Amount = 0;
             if (!(int.TryParse(BidInCopper.Text, out Bid)))
             {
                 MessageBox.Show("Bid in Copper missing or not a Number");
@@ -89,18 +63,6 @@ namespace Archage_Auction_House_Collector
             {
                 MessageBox.Show("Buyout in Copper missing or not a Number");
                 return;
-            }
-            if (ItemAmount.Text == "" && Asume.Checked)
-            {
-                Amount = 1;
-            }
-            else
-            {
-                if (!int.TryParse(ItemAmount.Text, out Amount))
-                {
-                    MessageBox.Show("Item Amount missing or not a Number. (Check Setting to assume 1 if left empty)");
-                    return;
-                }
             }
             string name = "";
             if (ItemName.Text != "")
@@ -139,20 +101,43 @@ namespace Archage_Auction_House_Collector
         {
 
         }
-        private IEnumerable<AuctionItem> ReadDatabase(string _table, int starttimestamp = 0)
+        private AuctionItem ReadDatabase(string _table, int starttimestamp,int endtimestamp)
         {
-            int endtimestamp = (int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             var col = DB.GetCollection<AuctionItem>(_table);
             var results = col.Find(x => x.itemName == _table).Where(x => x.TimeStamp > starttimestamp).Where(x => x.TimeStamp < endtimestamp);
-            return results;
+            AuctionItem returnItem = new AuctionItem();
+            if (results.Count() > 0)
+            {
+                returnItem.TimeStamp = results.ElementAt(0).TimeStamp;
+                returnItem.itemName = results.ElementAt(0).itemName;
+                
+                int bidsum = 0;
+                int buysum = 0;
+                for (int i = 0;i< results.Count();i++)
+                {
+                    bidsum += results.ElementAt(i).BidPrice;
+                    buysum += results.ElementAt(i).BuyoutPrice;
+                }
+                returnItem.BuyoutPrice = Convert.ToInt32(buysum / results.Count());
+                returnItem.BidPrice = Convert.ToInt32(bidsum / results.Count());
+            }
+            else
+            {
+                returnItem.BuyoutPrice = 0;
+                returnItem.BidPrice = 0;
+                returnItem.TimeStamp = starttimestamp;
+                returnItem.itemName = _table;
+            }
+            return returnItem;
         }
 
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
 
         }
-        private string HTMLString(IEnumerable<AuctionItem> items)
+        private string HTMLString(List<AuctionItem> items)
         {
+            items.Reverse();
             string result = "<!DOCTYPE html>";
             result = "<html>" + System.Environment.NewLine;
             result += "<head>" + System.Environment.NewLine;
@@ -161,14 +146,16 @@ namespace Archage_Auction_House_Collector
             result += "<body>" + System.Environment.NewLine;
             string curDir = "file:///" + Directory.GetCurrentDirectory() + @"\Scripts\Chart.js";
             result += "<script type='text/javascript' src='" + curDir + "'></script>" + System.Environment.NewLine;
-            result += "<canvas ID='datachart' css='width:100%;height:100%;' width='800' height='400'></canvas>" + System.Environment.NewLine;
+            result += "<canvas ID='datachart' css='width:" + (Chartbrowser.Width - 20) + "px;height:" + (Chartbrowser.Height - 20) + "px;' width='" + (Chartbrowser.Width - 20) + "' height='" + (Chartbrowser.Height - 20) + "'></canvas>" + System.Environment.NewLine;
             result += "<script>" + System.Environment.NewLine;
             result += "var ctx = document.getElementById('datachart').getContext('2d');" + System.Environment.NewLine;
             result += "var data = {" + System.Environment.NewLine;
             result += "labels: [" + System.Environment.NewLine;
             foreach (var item in items)
             {
-                result += "'" + item.TimeStamp + "',";
+                DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                dateTime = dateTime.AddSeconds(item.TimeStamp);
+                result += "'" +dateTime.Hour+"th Hour "+ dateTime.Day+"."+dateTime.Month+"."+dateTime.Year + "',";
             }
             result = result.Remove(result.Length - 1);
             result += "]," + System.Environment.NewLine;
@@ -183,9 +170,23 @@ namespace Archage_Auction_House_Collector
             result += "pointHighlightFill: '#fff'," + System.Environment.NewLine;
             result += "pointHighlightStroke: 'rgba(255,0,0,1)'," + System.Environment.NewLine;
             result += "data: [" + System.Environment.NewLine;
-            foreach (var item in items)
+            for(int i =0;i < items.Count;i++)
             {
-                result += item.BuyoutPrice + ",";
+                var item = items.ElementAt(i);
+                
+                if (item.BuyoutPrice != 0)
+                {
+                    result += item.BuyoutPrice + ",";
+                }
+                else
+                {
+                    int j = i;
+                    while (items.ElementAt(j).BuyoutPrice == 0 && j > 0)
+                    {
+                        j--;
+                    }
+                    result += items.ElementAt(j).BuyoutPrice + ",";
+                }
             }
             result = result.Remove(result.Length - 1);
             result += "]" + System.Environment.NewLine;
@@ -199,18 +200,33 @@ namespace Archage_Auction_House_Collector
             result += "pointHighlightFill: '#fff'," + System.Environment.NewLine;
             result += "pointHighlightStroke: 'rgba(0,0,255,1)'," + System.Environment.NewLine;
             result += "data: [" + System.Environment.NewLine;
-            foreach (var item in items)
+            for (int i = 0; i < items.Count; i++)
             {
-                result += item.BidPrice + ",";
+                var item = items.ElementAt(i);
+
+                if (item.BidPrice != 0)
+                {
+                    result += item.BidPrice + ",";
+                }
+                else
+                {
+                    int j = i;
+                    while (items.ElementAt(j).BidPrice == 0 && j > 0)
+                    {
+                        j--;
+                    }
+                    result += items.ElementAt(j).BidPrice + ",";
+                }
             }
+
             result = result.Remove(result.Length - 1);
             result += "]" + System.Environment.NewLine;
             result += "}" + System.Environment.NewLine;
             result += "]" + System.Environment.NewLine;
             result += "}" + System.Environment.NewLine;
 
-
-            result += "var linechart = new Chart(ctx).Line(data);" + System.Environment.NewLine;
+            result += "var options = {bezierCurve:false};";
+            result += "var linechart = new Chart(ctx).Line(data,options);" + System.Environment.NewLine;
             result += "</script>" + System.Environment.NewLine;
 
             result += "</body>" + System.Environment.NewLine;
@@ -224,15 +240,30 @@ namespace Archage_Auction_House_Collector
         {
             if (Measurment.Items.Count > 0)
             {
+                int finalstartime = 0;
                 int starttime = (int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+                int endtime = 0;
+                List<AuctionItem> ResultSet = new List<AuctionItem>();
+                int timesteps = 3600;
                 switch (timespanselect.SelectedIndex)
                 {
-                    case 0: starttime -= 604800; break;
-                    case 1: starttime -= 2592000; break;
-                    case 2: starttime -= 31536000; break;
+                    case 0: finalstartime = starttime - 604800*1; timesteps = 3600*6; break;
+                    case 1: finalstartime = starttime - 604800*2; timesteps = 3600*6; break;
+                    case 2: finalstartime = starttime - 604800*3; timesteps = 3600*24; break;
+                    case 3: finalstartime = starttime - 604800*4; timesteps = 3600*24; break;
                 }
-                var result = ReadDatabase(Measurment.Text.ToLower(), starttime);
-                if (result.Count() > 0)
+                while(starttime >= finalstartime)
+                {
+                    starttime -= timesteps;
+                    endtime = starttime + timesteps;
+                    var auctionitem = ReadDatabase(Measurment.Text.ToLower(), starttime, endtime);
+                    if(auctionitem != null)
+                    {
+                        ResultSet.Add(auctionitem);
+                    }
+                }
+                
+                if (ResultSet.Count() > 0)
                 {
                     Chartbrowser.Navigate("about:blank");
 
@@ -240,7 +271,7 @@ namespace Archage_Auction_House_Collector
                     {
                         Chartbrowser.Document.Write(string.Empty);
                     }
-                    Chartbrowser.DocumentText = HTMLString(result);
+                    Chartbrowser.DocumentText = HTMLString(ResultSet);
                 }
             }
         }
@@ -277,6 +308,44 @@ namespace Archage_Auction_House_Collector
             foreach (var item in itemstodelete)
             {
                 TimeStampList.Items.Remove(item);
+            }
+        }
+        private void Form_Resize(object sender, System.EventArgs e)
+        {
+            Control control = (Control)sender;
+
+            Tabs.Width = control.Size.Width;
+            if(Tabs.SelectedTab.Name == "DataExploration")
+            {
+                Chartbrowser.Width = this.Width - 150;
+                Chartbrowser.Height = this.Height-50;
+                Tabs.Width = this.Width;
+                Tabs.Height = this.Height;
+            }
+        }
+        private void Form1_ResizeEnd(Object sender, EventArgs e)
+        {
+
+            MessageBox.Show("You are in the Form.ResizeEnd event.");
+
+        }
+        private void TabSelectIndexChanged(object sender, EventArgs e)
+        {
+            if (Tabs.SelectedTab.Name == "DataExploration")
+            {
+                Tabs.Width = 1000;
+                Tabs.Height = 600;
+                this.Width = 1000;
+                this.Height = 600;
+                Chartbrowser.Width = 1000 - 150;
+                Chartbrowser.Height = 600 - 231;
+            }
+            else
+            {
+                Tabs.Width = 558;
+                Tabs.Height = 265;
+                this.Width = 558;
+                this.Height = 265;
             }
         }
     }

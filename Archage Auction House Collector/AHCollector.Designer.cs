@@ -36,8 +36,6 @@ namespace Archage_Auction_House_Collector
             this.BidInCopperLabel = new System.Windows.Forms.Label();
             this.BuyoutinCopper = new System.Windows.Forms.TextBox();
             this.BuyInCopperLabel = new System.Windows.Forms.Label();
-            this.ItemAmount = new System.Windows.Forms.TextBox();
-            this.AmountLabel = new System.Windows.Forms.Label();
             this.Save_btn = new System.Windows.Forms.Button();
             this.Measurment = new System.Windows.Forms.ComboBox();
             this.MeasurementLabel = new System.Windows.Forms.Label();
@@ -49,18 +47,16 @@ namespace Archage_Auction_House_Collector
             this.Chartbrowser = new System.Windows.Forms.WebBrowser();
             this.timespanlabel = new System.Windows.Forms.Label();
             this.timespanselect = new System.Windows.Forms.ComboBox();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.Asume = new System.Windows.Forms.CheckBox();
             this.PointTab = new System.Windows.Forms.TabPage();
+            this.deletepoint = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.TimeStampList = new System.Windows.Forms.CheckedListBox();
             this.MeasurementCorection = new System.Windows.Forms.ComboBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.deletepoint = new System.Windows.Forms.Button();
             this.Tabs.SuspendLayout();
             this.DataEntry.SuspendLayout();
             this.DataExploration.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.PointTab.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,22 +108,6 @@ namespace Archage_Auction_House_Collector
             this.BuyInCopperLabel.TabIndex = 4;
             this.BuyInCopperLabel.Text = "Buyout in Copper";
             // 
-            // ItemAmount
-            // 
-            this.ItemAmount.Location = new System.Drawing.Point(356, 19);
-            this.ItemAmount.Name = "ItemAmount";
-            this.ItemAmount.Size = new System.Drawing.Size(63, 20);
-            this.ItemAmount.TabIndex = 7;
-            // 
-            // AmountLabel
-            // 
-            this.AmountLabel.AutoSize = true;
-            this.AmountLabel.Location = new System.Drawing.Point(353, 3);
-            this.AmountLabel.Name = "AmountLabel";
-            this.AmountLabel.Size = new System.Drawing.Size(66, 13);
-            this.AmountLabel.TabIndex = 6;
-            this.AmountLabel.Text = "Item Amount";
-            // 
             // Save_btn
             // 
             this.Save_btn.Location = new System.Drawing.Point(196, 59);
@@ -160,13 +140,14 @@ namespace Archage_Auction_House_Collector
             // 
             this.Tabs.Controls.Add(this.DataEntry);
             this.Tabs.Controls.Add(this.DataExploration);
-            this.Tabs.Controls.Add(this.tabPage1);
             this.Tabs.Controls.Add(this.PointTab);
+            this.Tabs.Controls.Add(this.tabPage2);
             this.Tabs.Location = new System.Drawing.Point(-2, -1);
             this.Tabs.Name = "Tabs";
             this.Tabs.SelectedIndex = 0;
-            this.Tabs.Size = new System.Drawing.Size(1027, 532);
+            this.Tabs.Size = new System.Drawing.Size(547, 231);
             this.Tabs.TabIndex = 11;
+            this.Tabs.SelectedIndexChanged += this.TabSelectIndexChanged;
             // 
             // DataEntry
             // 
@@ -176,14 +157,12 @@ namespace Archage_Auction_House_Collector
             this.DataEntry.Controls.Add(this.ItemName);
             this.DataEntry.Controls.Add(this.BidInCopperLabel);
             this.DataEntry.Controls.Add(this.BidInCopper);
-            this.DataEntry.Controls.Add(this.ItemAmount);
             this.DataEntry.Controls.Add(this.BuyInCopperLabel);
-            this.DataEntry.Controls.Add(this.AmountLabel);
             this.DataEntry.Controls.Add(this.BuyoutinCopper);
             this.DataEntry.Location = new System.Drawing.Point(4, 22);
             this.DataEntry.Name = "DataEntry";
             this.DataEntry.Padding = new System.Windows.Forms.Padding(3);
-            this.DataEntry.Size = new System.Drawing.Size(1019, 506);
+            this.DataEntry.Size = new System.Drawing.Size(539, 205);
             this.DataEntry.TabIndex = 0;
             this.DataEntry.Text = "Data entry";
             this.DataEntry.UseVisualStyleBackColor = true;
@@ -207,7 +186,7 @@ namespace Archage_Auction_House_Collector
             this.DataExploration.Location = new System.Drawing.Point(4, 22);
             this.DataExploration.Name = "DataExploration";
             this.DataExploration.Padding = new System.Windows.Forms.Padding(3);
-            this.DataExploration.Size = new System.Drawing.Size(1019, 506);
+            this.DataExploration.Size = new System.Drawing.Size(539, 205);
             this.DataExploration.TabIndex = 1;
             this.DataExploration.Text = "Data exploration";
             this.DataExploration.UseVisualStyleBackColor = true;
@@ -228,7 +207,7 @@ namespace Archage_Auction_House_Collector
             this.Chartbrowser.Location = new System.Drawing.Point(136, 3);
             this.Chartbrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.Chartbrowser.Name = "Chartbrowser";
-            this.Chartbrowser.Size = new System.Drawing.Size(883, 503);
+            this.Chartbrowser.Size = new System.Drawing.Size(403, 202);
             this.Chartbrowser.TabIndex = 14;
             // 
             // timespanlabel
@@ -245,34 +224,14 @@ namespace Archage_Auction_House_Collector
             this.timespanselect.FormattingEnabled = true;
             this.timespanselect.Items.AddRange(new object[] {
             "Last 7 Days",
-            "Last 30 Days",
-            "Last 365 Days"});
+            "Last 14 Days",
+            "Last 21 Days",
+            "Last 28 Days"});
             this.timespanselect.Location = new System.Drawing.Point(9, 72);
             this.timespanselect.Name = "timespanselect";
             this.timespanselect.Size = new System.Drawing.Size(121, 21);
             this.timespanselect.TabIndex = 11;
             this.timespanselect.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.Asume);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1019, 506);
-            this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "Settings";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // Asume
-            // 
-            this.Asume.AutoSize = true;
-            this.Asume.Location = new System.Drawing.Point(21, 17);
-            this.Asume.Name = "Asume";
-            this.Asume.Size = new System.Drawing.Size(187, 17);
-            this.Asume.TabIndex = 1;
-            this.Asume.Text = "assume 1 if Amount not specified?";
-            this.Asume.UseVisualStyleBackColor = true;
             // 
             // PointTab
             // 
@@ -283,10 +242,20 @@ namespace Archage_Auction_House_Collector
             this.PointTab.Location = new System.Drawing.Point(4, 22);
             this.PointTab.Name = "PointTab";
             this.PointTab.Padding = new System.Windows.Forms.Padding(3);
-            this.PointTab.Size = new System.Drawing.Size(1019, 506);
+            this.PointTab.Size = new System.Drawing.Size(142, 205);
             this.PointTab.TabIndex = 3;
             this.PointTab.Text = "Point Correction";
             this.PointTab.UseVisualStyleBackColor = true;
+            // 
+            // deletepoint
+            // 
+            this.deletepoint.Location = new System.Drawing.Point(35, 148);
+            this.deletepoint.Name = "deletepoint";
+            this.deletepoint.Size = new System.Drawing.Size(146, 39);
+            this.deletepoint.TabIndex = 4;
+            this.deletepoint.Text = "Delete Point";
+            this.deletepoint.UseVisualStyleBackColor = true;
+            this.deletepoint.Click += new System.EventHandler(this.deletepoint_Click);
             // 
             // label1
             // 
@@ -302,7 +271,7 @@ namespace Archage_Auction_House_Collector
             this.TimeStampList.FormattingEnabled = true;
             this.TimeStampList.Location = new System.Drawing.Point(208, 33);
             this.TimeStampList.Name = "TimeStampList";
-            this.TimeStampList.Size = new System.Drawing.Size(399, 439);
+            this.TimeStampList.Size = new System.Drawing.Size(308, 154);
             this.TimeStampList.TabIndex = 2;
             // 
             // MeasurementCorection
@@ -314,38 +283,37 @@ namespace Archage_Auction_House_Collector
             this.MeasurementCorection.TabIndex = 0;
             this.MeasurementCorection.SelectedIndexChanged += new System.EventHandler(this.MeasurementCorection_SelectedIndexChanged);
             // 
-            // deletepoint
+            // tabPage2
             // 
-            this.deletepoint.Location = new System.Drawing.Point(35, 433);
-            this.deletepoint.Name = "deletepoint";
-            this.deletepoint.Size = new System.Drawing.Size(146, 39);
-            this.deletepoint.TabIndex = 4;
-            this.deletepoint.Text = "Delete Point";
-            this.deletepoint.UseVisualStyleBackColor = true;
-            this.deletepoint.Click += new System.EventHandler(this.deletepoint_Click);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(142, 205);
+            this.tabPage2.TabIndex = 4;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // Archage_AH_DataCollector
             // 
+            this.AccessibleName = "AH_DataCollector_Window";
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1022, 527);
+            this.ClientSize = new System.Drawing.Size(542, 226);
             this.Controls.Add(this.Tabs);
             this.Name = "Archage_AH_DataCollector";
             this.Text = "           ";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Resize += new System.EventHandler(this.Form_Resize);
             this.Tabs.ResumeLayout(false);
             this.DataEntry.ResumeLayout(false);
             this.DataEntry.PerformLayout();
             this.DataExploration.ResumeLayout(false);
             this.DataExploration.PerformLayout();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.PointTab.ResumeLayout(false);
             this.PointTab.PerformLayout();
             this.ResumeLayout(false);
 
         }
-
         #endregion
 
         private System.Windows.Forms.Label ItemNameLabel;
@@ -354,8 +322,6 @@ namespace Archage_Auction_House_Collector
         private System.Windows.Forms.Label BidInCopperLabel;
         private System.Windows.Forms.TextBox BuyoutinCopper;
         private System.Windows.Forms.Label BuyInCopperLabel;
-        private System.Windows.Forms.TextBox ItemAmount;
-        private System.Windows.Forms.Label AmountLabel;
         private System.Windows.Forms.Button Save_btn;
         private System.Windows.Forms.ComboBox Measurment;
         private System.Windows.Forms.Label MeasurementLabel;
@@ -365,8 +331,6 @@ namespace Archage_Auction_House_Collector
         private System.Windows.Forms.Label timespanlabel;
         private System.Windows.Forms.ComboBox timespanselect;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.CheckBox Asume;
         private System.Windows.Forms.WebBrowser Chartbrowser;
         private System.Windows.Forms.Button updatechart;
         private System.Windows.Forms.ComboBox ItemNameComboBox;
@@ -375,6 +339,7 @@ namespace Archage_Auction_House_Collector
         private System.Windows.Forms.CheckedListBox TimeStampList;
         private System.Windows.Forms.ComboBox MeasurementCorection;
         private System.Windows.Forms.Button deletepoint;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }
 

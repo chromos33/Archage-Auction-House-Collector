@@ -116,7 +116,6 @@
       <DependentUpon>AHCollector.cs</DependentUpon>
     </Compile>
     <Compile Include="AuctionItem.cs" />
-    <Compile Include="Item.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AHCollector.resx">
@@ -143,7 +142,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\Chart.js">
