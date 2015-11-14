@@ -17,17 +17,26 @@ namespace Archage_Auction_House_Collector
     public partial class Archage_AH_DataCollector : Form
     {
         LiteDatabase DB;
-        LiteDatabase newDB;
+        LiteDatabase InventoryDB;
+        LiteDatabase ConversionDB;
         string path;
-        string newpath;
+        string inventoryPath;
+        string conversionPath;
         public Archage_AH_DataCollector()
         {
             InitializeComponent();
             path = Directory.GetCurrentDirectory() + "\\ItemDB.db";
             DB = new LiteDatabase(@path);
+            inventoryPath = Directory.GetCurrentDirectory() + "\\InventoryDB.db";
+            InventoryDB = new LiteDatabase(@inventoryPath);
+
+            conversionPath = Directory.GetCurrentDirectory() + "\\ConversionDB.db";
+            ConversionDB = new LiteDatabase(@conversionPath);
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            Duration.SelectedIndex = 0;
+
             IEnumerable<string> CollectionNames = DB.GetCollectionNames();
             foreach (string name in CollectionNames)
             {
@@ -35,6 +44,13 @@ namespace Archage_Auction_House_Collector
                 ItemNameComboBox.Items.Add(name);
                 Measurment.Items.Add(name);
                 MeasurementCorection.Items.Add(name);
+                Conversion_BaseItem.Items.Add(name);
+                Conversion_Result_Item.Items.Add(name);
+            }
+            IEnumerable<string> Inventory_CollectionNames = InventoryDB.GetCollectionNames();
+            foreach (string name in Inventory_CollectionNames)
+            {
+                Inventory_ExistingItem.Items.Add(name);
             }
             if (Measurment.Items.Count > 0)
             {
@@ -54,15 +70,63 @@ namespace Archage_Auction_House_Collector
             }
             int Bid = 0;
             int Buyout = 0;
-            if (!(int.TryParse(BidInCopper.Text, out Bid)))
+            if (!(int.TryParse(BidInCopper.Text, out Bid)) && !BidInCopper.Text.Contains(','))
             {
                 MessageBox.Show("Bid in Copper missing or not a Number");
                 return;
             }
-            if (!(int.TryParse(BuyoutinCopper.Text, out Buyout)))
+            if (!(int.TryParse(BuyoutinCopper.Text, out Buyout)) && !BuyoutinCopper.Text.Contains(','))
             {
                 MessageBox.Show("Buyout in Copper missing or not a Number");
                 return;
+            }
+            if(BuyoutinCopper.Text.Contains(','))
+            {
+                int buycount = BuyoutinCopper.Text.Count(f => f == ',');
+                if(buycount == 1)
+                {
+                    int silver = 0;
+                    int copper = 0;
+                    string[] money = BuyoutinCopper.Text.Split(',');
+                    int.TryParse(money[1], out silver);
+                    int.TryParse(money[2], out copper);
+                    Buyout = silver * 100 + copper;
+                }
+                if(buycount == 2)
+                {
+                    int gold = 0;
+                    int silver = 0;
+                    int copper = 0;
+                    string[] money = BuyoutinCopper.Text.Split(',');
+                    int.TryParse(money[0], out gold);
+                    int.TryParse(money[1], out silver);
+                    int.TryParse(money[2], out copper);
+                    Buyout = gold * 100 * 100 + silver * 100 + copper;
+                }
+            }
+            if (BidInCopper.Text.Contains(','))
+            {
+                int bidcount = BidInCopper.Text.Count(f => f == ',');
+                if (bidcount == 1)
+                {
+                    int silver = 0;
+                    int copper = 0;
+                    string[] money = BidInCopper.Text.Split(',');
+                    int.TryParse(money[1], out silver);
+                    int.TryParse(money[2], out copper);
+                    Bid = silver * 100 + copper;
+                }
+                if (bidcount == 2)
+                {
+                    int gold = 0;
+                    int silver = 0;
+                    int copper = 0;
+                    string[] money = BidInCopper.Text.Split(',');
+                    int.TryParse(money[0], out gold);
+                    int.TryParse(money[1], out silver);
+                    int.TryParse(money[2], out copper);
+                    Bid = gold * 100 * 100 + silver * 100 + copper;
+                }
             }
             string name = "";
             if (ItemName.Text != "")
@@ -74,6 +138,7 @@ namespace Archage_Auction_House_Collector
             {
                 name = ItemNameComboBox.SelectedItem.ToString();
             }
+            name = name.Replace(" ", "_");
             AuctionItem newItemEntry = new AuctionItem();
             newItemEntry.itemName = name;
             newItemEntry.BuyoutPrice = Buyout;
@@ -84,8 +149,13 @@ namespace Archage_Auction_House_Collector
                 Measurment.Items.Add(name);
                 ItemNameComboBox.Items.Add(name);
                 MeasurementCorection.Items.Add(name);
+                Conversion_BaseItem.Items.Add(name);
+                Conversion_Result_Item.Items.Add(name);
+                ItemNameComboBox.SelectedIndex = ItemNameComboBox.Items.Count -1;
             }
             saveObjecttoDB(newItemEntry);
+            BuyoutinCopper.Text = "";
+            BidInCopper.Text = "";
         }
         private void saveObjecttoDB(AuctionItem insert)
         {
@@ -346,6 +416,264 @@ namespace Archage_Auction_House_Collector
                 Tabs.Height = 265;
                 this.Width = 558;
                 this.Height = 265;
+            }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Calculate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string output = "";
+                double _Gold = Double.Parse(Gold.Text);
+                double _Silver = Double.Parse(Silver.Text);
+                double _Copper = Double.Parse(Copper.Text);
+                int _tries = Int32.Parse(numberofauctions.Text);
+                double _BuyPrice = _Gold * 100 * 100 + _Silver * 100 + _Copper;
+                int _Duration = Duration.SelectedIndex;
+                _Duration++;
+                int limit = 3;
+                if(_tries > 0)
+                {
+                    limit = _tries;
+                }
+                for(int i = 0; i< limit; i++)
+                {
+                    
+                    double BreakEvenPoint = _BuyPrice + (_BuyPrice * (0.05 +0.01* _Duration));
+                    double newCopper = BreakEvenPoint % 100;
+                    double newSilver = Convert.ToInt32((BreakEvenPoint / 100)) % 100;
+                    double newGold = Convert.ToInt32((BreakEvenPoint / 100 / 100));
+
+                    output += i+"th Auction Break Even Point:"+Convert.ToInt32(newGold) +" Gold "+ Convert.ToInt32(newSilver) + " Silver " + Convert.ToInt32(newCopper) + " Copper " + System.Environment.NewLine;
+                    _BuyPrice = _BuyPrice + (_BuyPrice * (0.01 * _Duration));
+                }
+                BreakEvenPointsText.Text = output;
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Only numbers accepted");
+            }
+            
+        }
+
+        private void Inventory_SellBtn_Click(object sender, EventArgs e)
+        {
+            List<InventoryItem> itemstodelete = new List<InventoryItem>();
+            foreach(InventoryItem item in Inventory_ItemList.CheckedItems)
+            {
+                itemstodelete.Add(item);
+            }
+            foreach(InventoryItem item in itemstodelete)
+            {
+                Inventory_ItemList.Items.Remove(item);
+                var loc = InventoryDB.GetCollection<InventoryItem>(item.itemname);
+                loc.Delete(item.id);
+            }
+            Inventory_Recalculate();
+
+        }
+
+        private void Inventory_BuyBtn_Click(object sender, EventArgs e)
+        {
+            string searchname = "";
+            if(Inventory_NewItem.Text != "")
+            {
+                searchname = Inventory_NewItem.Text;
+            }
+            if(Inventory_ExistingItem.SelectedItem != null)
+            {
+                searchname = Inventory_ExistingItem.SelectedItem.ToString();
+            }
+            if(searchname != "")
+            {
+                try
+                {
+                    if(Inventory_Silver.Text.Length>2 || Inventory_Copper.Text.Length >2)
+                    {
+                        MessageBox.Show("Error in Input Silver/Copper cant be bigger than 99");
+                        return;
+                    }
+                    int gold = 0;
+                    int silver = 0;
+                    int copper = 0;
+                    if(Inventory_Gold.Text.Length > 0)
+                    {
+                        gold = Int32.Parse(Inventory_Gold.Text);
+                    }
+                    if (Inventory_Silver.Text.Length > 0)
+                    {
+                        silver = Int32.Parse(Inventory_Silver.Text);
+                    }
+                    if (Inventory_Copper.Text.Length > 0)
+                    {
+                        copper = Int32.Parse(Inventory_Copper.Text);
+                    }
+                    if(gold == 0 && silver == 0 && copper == 0)
+                    {
+                        MessageBox.Show("No Price entered or Price is 0");
+                        return;
+                    }
+                    if(Inventory_Amount.Text.Length == 0)
+                    {
+                        MessageBox.Show("Enter an amount");
+                        return;
+                    }
+
+                    InventoryItem insert = new InventoryItem();
+                    insert.gold = gold;
+                    insert.silver = silver;
+                    insert.copper = copper;
+                    insert.itemname = searchname.Replace(" ","_");
+                    insert.amount = Int32.Parse(Inventory_Amount.Text);
+                    var col = InventoryDB.GetCollection<InventoryItem>(insert.itemname);
+                    col.Insert(insert);
+                    Inventory_ItemList.Items.Add(insert);
+                    Inventory_Recalculate();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                    MessageBox.Show("Gold/Silver/Copper must be entered as a Number");
+                }
+                
+            }
+            else
+            {
+                MessageBox.Show("Itemname must be either entered or selected");
+                return;
+            }
+        }
+
+        private void Inventory_ExistingItem_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selected = Inventory_ExistingItem.Text;
+            var col = InventoryDB.GetCollection<InventoryItem>(selected);
+            var results = col.FindAll();
+            Inventory_ItemList.Items.Clear();
+            foreach (InventoryItem result in results)
+            {
+                Inventory_ItemList.Items.Add(result);
+            }
+            Inventory_Recalculate();
+        }
+        public void Inventory_Recalculate()
+        {
+            if(Inventory_ItemList.Items.Count > 0)
+            {
+                int totalamount = 0;
+                int totalprice = 0;
+                foreach (InventoryItem item in Inventory_ItemList.Items)
+                {
+                    totalamount += item.amount;
+                    totalprice += item.priceincopper();
+                }
+                double averagepriceperpiece = totalprice / totalamount;
+                double newCopper = averagepriceperpiece % 100;
+                double newSilver = Convert.ToInt32((averagepriceperpiece / 100)) % 100;
+                double newGold = Convert.ToInt32((averagepriceperpiece / 100 / 100));
+                Inventory_TotalAmount.Text = totalamount.ToString();
+                Inventory_AveragePrice.Text = newGold + "g " + newSilver + "s " + newCopper + "c";
+            }
+            else
+            {
+                Inventory_TotalAmount.Text = "NAN";
+                Inventory_AveragePrice.Text = "NAN";
+            }
+        }
+
+        private void Conversion_Save_Btn_Click(object sender, EventArgs e)
+        {
+            //ConversionDB
+            int baseitemcount = 0;
+            int resultitemcount = 0;
+            string baseitem = "";
+            string resultitem = "";
+            int laborcost = 0;
+            if (!int.TryParse(Conversion_Base_Count.Text, out baseitemcount))
+            {
+                MessageBox.Show("Item Count must be a whole number");
+                return;
+            }
+            if (!int.TryParse(Conversion_Result_Count.Text, out resultitemcount))
+            {
+                MessageBox.Show("Item Count must be a whole number");
+                return;
+            }
+            if(Conversion_BaseItem.SelectedItem.ToString() == "")
+            {
+                MessageBox.Show("Base Item must be selected");
+                return;
+            }
+            if (Conversion_Result_Item.SelectedItem.ToString() == "")
+            {
+                MessageBox.Show("Result Item must be selected");
+                return;
+            }
+            Conversion newitem = new Conversion();
+            newitem.LaborCost = laborcost;
+            newitem.ResultItem = Conversion_Result_Item.SelectedItem.ToString();
+            newitem.SourceItem = Conversion_BaseItem.SelectedItem.ToString();
+            newitem.SourceItemCount = baseitemcount;
+            newitem.ResultItemCount = resultitemcount;
+            newitem.name = "Conversion";
+
+            var col = ConversionDB.GetCollection<Conversion>(newitem.name);
+            col.Insert(newitem);
+        }
+
+        private void Conversion_Check_Click(object sender, EventArgs e)
+        {
+            Conversion_Rule_Applicableg.Items.Clear();
+            int workerscopensation = 0;
+            double percent = 0;
+            
+            if (!double.TryParse(Conversion_Profit_Percent.Text, out percent))
+            {
+                MessageBox.Show("Profit % must be a number > 0 (0.0% -> xxx.xx%)");
+                return;
+            }
+            percent += 100;
+            percent = percent / 100;
+            if (!int.TryParse(Conversion_Workers_Compensation_Potion.Text, out workerscopensation))
+            {
+                MessageBox.Show("Workers Compensation Price must be given in Copper");
+                return;
+            }
+            var col = ConversionDB.GetCollection<Conversion>("Conversion");
+            var results = col.FindAll();
+            int starttimestamp = (int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 86400*2;
+            foreach(Conversion item in results)
+            {
+                var resultpricecol = DB.GetCollection<AuctionItem>(item.ResultItem);
+                var resultpriceitems = resultpricecol.FindAll().Where(x => x.TimeStamp > starttimestamp);
+                var sourcepricecol = DB.GetCollection<AuctionItem>(item.SourceItem);
+                var sourcepriceitems = sourcepricecol.FindAll().Where(x => x.TimeStamp > starttimestamp);
+                foreach(var resultitem in resultpriceitems)
+                {
+                    foreach(var sourceitem in sourcepriceitems)
+                    {
+                        //preis = sourceitemprice * sourcepriceamount + 70* potionpreis / 1000
+                        double price = (50 + sourceitem.BuyoutPrice * item.SourceItemCount + item.LaborCost * workerscopensation / 1000);
+
+                        double newCopper = Convert.ToInt32(price % 100);
+                        double newSilver = Convert.ToInt32((price / 100)) % 100;
+                        double newGold = Convert.ToInt32((price / 100 / 100));
+                        double saleprice = (resultitem.BuyoutPrice * 1.15) * 0.94;
+                        if (price <= saleprice)
+                        {
+                            double profitCopper = Convert.ToInt32(saleprice % 100);
+                            double profitSilver = Convert.ToInt32((saleprice / 100)) % 100;
+                            double profitGold = Convert.ToInt32((saleprice / 100 / 100));
+                            Conversion_Rule_Applicableg.Items.Add( item.SourceItemCount + " " + sourceitem.itemName + " " + newGold + "g "+ newSilver+ "s "+ newCopper + "c " + " / "+ item.ResultItemCount +" "+ item.ResultItem + " = " + "Profit:" + profitGold + "g " + profitSilver + "s " + profitCopper + "c ");
+                        }
+                    }
+                }
             }
         }
     }
