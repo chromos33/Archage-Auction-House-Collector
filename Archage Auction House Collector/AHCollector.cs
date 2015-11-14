@@ -647,31 +647,37 @@ namespace Archage_Auction_House_Collector
             }
             var col = ConversionDB.GetCollection<Conversion>("Conversion");
             var results = col.FindAll();
-            int starttimestamp = (int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 86400*2;
+            int starttimestamp = (int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 86400/2;
             foreach(Conversion item in results)
             {
                 var resultpricecol = DB.GetCollection<AuctionItem>(item.ResultItem);
                 var resultpriceitems = resultpricecol.FindAll().Where(x => x.TimeStamp > starttimestamp);
                 var sourcepricecol = DB.GetCollection<AuctionItem>(item.SourceItem);
                 var sourcepriceitems = sourcepricecol.FindAll().Where(x => x.TimeStamp > starttimestamp);
+                double minprice = 9999999999;
                 foreach(var resultitem in resultpriceitems)
                 {
-                    foreach(var sourceitem in sourcepriceitems)
+                    if(resultitem.BuyoutPrice < minprice)
                     {
-                        //preis = sourceitemprice * sourcepriceamount + 70* potionpreis / 1000
-                        double price = (50 + sourceitem.BuyoutPrice * item.SourceItemCount + item.LaborCost * workerscopensation / 1000);
+                        minprice = resultitem.BuyoutPrice;
+                    }
+                }
+                foreach (var sourceitem in sourcepriceitems)
+                {
+                    //preis = sourceitemprice * sourcepriceamount + 70* potionpreis / 1000
+                    double price = (50 + sourceitem.BuyoutPrice * item.SourceItemCount + item.LaborCost * workerscopensation / 1000);
 
-                        double newCopper = Convert.ToInt32(price % 100);
-                        double newSilver = Convert.ToInt32((price / 100)) % 100;
-                        double newGold = Convert.ToInt32((price / 100 / 100));
-                        double saleprice = (resultitem.BuyoutPrice * 1.15) * 0.94;
-                        if (price <= saleprice)
-                        {
-                            double profitCopper = Convert.ToInt32(saleprice % 100);
-                            double profitSilver = Convert.ToInt32((saleprice / 100)) % 100;
-                            double profitGold = Convert.ToInt32((saleprice / 100 / 100));
-                            Conversion_Rule_Applicableg.Items.Add( item.SourceItemCount + " " + sourceitem.itemName + " " + newGold + "g "+ newSilver+ "s "+ newCopper + "c " + " / "+ item.ResultItemCount +" "+ item.ResultItem + " = " + "Profit:" + profitGold + "g " + profitSilver + "s " + profitCopper + "c ");
-                        }
+                    double newCopper = Convert.ToInt32(price % 100);
+                    double newSilver = Convert.ToInt32((price / 100)) % 100;
+                    double newGold = Convert.ToInt32((price / 100 / 100));
+                    double saleprice = minprice * 0.94;
+                    if ((price * percent) <= saleprice)
+                    {
+                        double profit = saleprice - price;
+                        double profitCopper = Convert.ToInt32(profit % 100);
+                        double profitSilver = Convert.ToInt32((profit / 100)) % 100;
+                        double profitGold = Convert.ToInt32((profit / 100 / 100));
+                        Conversion_Rule_Applicableg.Items.Add(item.SourceItemCount + " " + sourceitem.itemName + " " + newGold + "g " + newSilver + "s " + newCopper + "c " + " / " + item.ResultItemCount + " " + item.ResultItem + " = " + "Profit:" + profitGold + "g " + profitSilver + "s " + profitCopper + "c ");
                     }
                 }
             }
