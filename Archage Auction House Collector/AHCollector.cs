@@ -19,9 +19,11 @@ namespace Archage_Auction_House_Collector
         LiteDatabase DB;
         LiteDatabase InventoryDB;
         LiteDatabase ConversionDB;
+        LiteDatabase RecipeDB;
         string path;
         string inventoryPath;
         string conversionPath;
+        string recipeDBPath;
         public Archage_AH_DataCollector()
         {
             InitializeComponent();
@@ -32,10 +34,24 @@ namespace Archage_Auction_House_Collector
 
             conversionPath = Directory.GetCurrentDirectory() + "\\ConversionDB.db";
             ConversionDB = new LiteDatabase(@conversionPath);
+
+            recipeDBPath = Directory.GetCurrentDirectory() + "\\RecipesDB.db";
+            RecipeDB = new LiteDatabase(@recipeDBPath);
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             Duration.SelectedIndex = 0;
+
+            //Crafting_Recipes_Recipe
+            //Crafting_Recipes_RecipeItem
+            var col = RecipeDB.GetCollection<RecipeItem>("Recipe");
+            var Recipes = col.FindAll();
+            foreach(RecipeItem item in Recipes)
+            {
+                Crafting_Recipes_Recipe.Items.Add(item);
+                Crafting_Recipes_RecipeItem.Items.Add(item);
+            }
+
 
             IEnumerable<string> CollectionNames = DB.GetCollectionNames();
             foreach (string name in CollectionNames)
@@ -46,6 +62,16 @@ namespace Archage_Auction_House_Collector
                 MeasurementCorection.Items.Add(name);
                 Conversion_BaseItem.Items.Add(name);
                 Conversion_Result_Item.Items.Add(name);
+                Conversion_Correction_BaseItem.Items.Add(name);
+                Conversion_Correction_ResultITem.Items.Add(name);
+                Crafting_Recipes_RecipeItemName.AutoCompleteCustomSource.Add(name);
+                ItemName.AutoCompleteCustomSource.Add(name);
+            }
+            var conversioncol = ConversionDB.GetCollection<Conversion>("Conversion");
+            var conversions = conversioncol.FindAll();
+            foreach(Conversion conversionitem in conversions)
+            {
+                Conversion_Correction_ItemSelect.Items.Add(conversionitem);
             }
             IEnumerable<string> Inventory_CollectionNames = InventoryDB.GetCollectionNames();
             foreach (string name in Inventory_CollectionNames)
@@ -151,7 +177,11 @@ namespace Archage_Auction_House_Collector
                 MeasurementCorection.Items.Add(name);
                 Conversion_BaseItem.Items.Add(name);
                 Conversion_Result_Item.Items.Add(name);
+                Conversion_Correction_BaseItem.Items.Add(name);
+                Conversion_Correction_ResultITem.Items.Add(name);
                 ItemNameComboBox.SelectedIndex = ItemNameComboBox.Items.Count -1;
+                Crafting_Recipes_RecipeItemName.AutoCompleteCustomSource.Add(name);
+                ItemName.AutoCompleteCustomSource.Add(name);
             }
             saveObjecttoDB(newItemEntry);
             BuyoutinCopper.Text = "";
@@ -595,11 +625,13 @@ namespace Archage_Auction_House_Collector
             string baseitem = "";
             string resultitem = "";
             int laborcost = 0;
+            int fixcost = 0;
             if (!int.TryParse(Conversion_Base_Count.Text, out baseitemcount))
             {
                 MessageBox.Show("Item Count must be a whole number");
                 return;
             }
+            int.TryParse(Conversion_Fix_Cost.Text, out fixcost);
             if (!int.TryParse(Conversion_Result_Count.Text, out resultitemcount))
             {
                 MessageBox.Show("Item Count must be a whole number");
@@ -621,6 +653,7 @@ namespace Archage_Auction_House_Collector
             newitem.SourceItem = Conversion_BaseItem.SelectedItem.ToString();
             newitem.SourceItemCount = baseitemcount;
             newitem.ResultItemCount = resultitemcount;
+            newitem.fixcost = fixcost;
             newitem.name = "Conversion";
 
             var col = ConversionDB.GetCollection<Conversion>(newitem.name);
@@ -654,31 +687,247 @@ namespace Archage_Auction_House_Collector
                 var resultpriceitems = resultpricecol.FindAll().Where(x => x.TimeStamp > starttimestamp);
                 var sourcepricecol = DB.GetCollection<AuctionItem>(item.SourceItem);
                 var sourcepriceitems = sourcepricecol.FindAll().Where(x => x.TimeStamp > starttimestamp);
-                double minprice = 9999999999;
+                double minbuyprice = 9999999999;
                 foreach(var resultitem in resultpriceitems)
                 {
-                    if(resultitem.BuyoutPrice < minprice)
+                    if(resultitem.BuyoutPrice < minbuyprice)
                     {
-                        minprice = resultitem.BuyoutPrice;
+                        minbuyprice = resultitem.BuyoutPrice;
                     }
                 }
                 foreach (var sourceitem in sourcepriceitems)
                 {
                     //preis = sourceitemprice * sourcepriceamount + 70* potionpreis / 1000
-                    double price = (50 + sourceitem.BuyoutPrice * item.SourceItemCount + item.LaborCost * workerscopensation / 1000);
+                    double buyprice = (item.fixcost + sourceitem.BuyoutPrice * item.SourceItemCount + item.LaborCost * workerscopensation / 1000);
+                    double bidprice = (item.fixcost + sourceitem.BidPrice * item.SourceItemCount + item.LaborCost * workerscopensation / 1000);
 
-                    double newCopper = Convert.ToInt32(price % 100);
-                    double newSilver = Convert.ToInt32((price / 100)) % 100;
-                    double newGold = Convert.ToInt32((price / 100 / 100));
-                    double saleprice = minprice * 0.94;
-                    if ((price * percent) <= saleprice)
+                    double newbuyCopper = Convert.ToInt32(buyprice % 100);
+                    double newbuySilver = Convert.ToInt32((buyprice / 100)) % 100;
+                    double newbuyGold = Convert.ToInt32((buyprice / 100 / 100));
+
+                    double newbidCopper = Convert.ToInt32(bidprice % 100);
+                    double newbidSilver = Convert.ToInt32((bidprice / 100)) % 100;
+                    double newbidGold = Convert.ToInt32((bidprice / 100 / 100));
+                    double saleprice = minbuyprice * 0.94;
+                    bool skip = false;
+                    if ((buyprice * percent) <= saleprice)
                     {
-                        double profit = saleprice - price;
+                        double profit = saleprice - buyprice;
                         double profitCopper = Convert.ToInt32(profit % 100);
                         double profitSilver = Convert.ToInt32((profit / 100)) % 100;
                         double profitGold = Convert.ToInt32((profit / 100 / 100));
-                        Conversion_Rule_Applicableg.Items.Add(item.SourceItemCount + " " + sourceitem.itemName + " " + newGold + "g " + newSilver + "s " + newCopper + "c " + " / " + item.ResultItemCount + " " + item.ResultItem + " = " + "Profit:" + profitGold + "g " + profitSilver + "s " + profitCopper + "c ");
+                        Conversion_Rule_Applicableg.Items.Add("Buy " + item.SourceItemCount + " " + sourceitem.itemName + " " + newbuyGold + "g " + newbuySilver + "s " + newbuyCopper + "c " + " / " + item.ResultItemCount + " " + item.ResultItem + " = " + "Profit:" + profitGold + "g " + profitSilver + "s " + profitCopper + "c ");
+                        skip = true;
                     }
+                    if ((bidprice * percent) <= saleprice && !skip)
+                    {
+                        double profit = saleprice - bidprice;
+                        double profitCopper = Convert.ToInt32(profit % 100);
+                        double profitSilver = Convert.ToInt32((profit / 100)) % 100;
+                        double profitGold = Convert.ToInt32((profit / 100 / 100));
+                        Conversion_Rule_Applicableg.Items.Add("Bid " + item.SourceItemCount + " " + sourceitem.itemName + " " + newbidGold + "g " + newbidSilver + "s " + newbidCopper + "c " + " / " + item.ResultItemCount + " " + item.ResultItem + " = " + "Profit:" + profitGold + "g " + profitSilver + "s " + profitCopper + "c "); 
+                    }
+                    
+                    
+                }
+            }
+        }
+
+        private void Conversion_Correction_ItemSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Conversion selecteditem = (Conversion) Conversion_Correction_ItemSelect.SelectedItem;
+            Conversion_Correction_BaseItem.SelectedItem = selecteditem.SourceItem;
+            Conversion_Correction_ResultITem.SelectedItem = selecteditem.ResultItem;
+            Conversion_Correction_BaseItemCount.Text = selecteditem.SourceItemCount.ToString();
+            Conversion_Correction_ResultItemCount.Text = selecteditem.ResultItemCount.ToString();
+
+            if(selecteditem.LaborCost != null)
+            {
+                Conversion_Correction_LaborCost.Text = selecteditem.LaborCost.ToString();
+            }
+            else
+            {
+                Conversion_Correction_LaborCost.Text = "0";
+            }
+            if (selecteditem.fixcost != null)
+            {
+                Conversion_Correction_FixCost.Text = selecteditem.fixcost.ToString();
+            }
+            else
+            {
+                Conversion_Correction_FixCost.Text = "0";
+            }
+
+        }
+
+        private void Conversion_Correction_Delete_Click(object sender, EventArgs e)
+        {
+            List<object> itemstodelete = new List<object>();
+            Conversion selecteditem = (Conversion) Conversion_Correction_ItemSelect.SelectedItem;
+            var loc = ConversionDB.GetCollection<Conversion>("Conversion");
+            Conversion_Correction_ItemSelect.Items.RemoveAt(Conversion_Correction_ItemSelect.SelectedIndex);
+            loc.Delete(selecteditem.Id);
+        }
+
+        private void Conversion_Correction_SaveBtn_Click(object sender, EventArgs e)
+        {
+            Conversion selecteditem = (Conversion)Conversion_Correction_ItemSelect.SelectedItem;
+            Conversion newitem = new Conversion();
+            newitem.SourceItem = Conversion_Correction_BaseItem.SelectedItem.ToString();
+            newitem.ResultItem = Conversion_Correction_ResultITem.SelectedItem.ToString();
+            try
+            {
+                newitem.SourceItemCount = Int32.Parse(Conversion_Correction_BaseItemCount.Text);
+                newitem.ResultItemCount = Int32.Parse(Conversion_Correction_ResultItemCount.Text);
+                newitem.LaborCost = Int32.Parse(Conversion_Correction_LaborCost.Text);
+                newitem.fixcost = Int32.Parse(Conversion_Correction_FixCost.Text);
+            } catch(Exception)
+            {
+                MessageBox.Show("No Letters in Numberfields!");
+            }
+            var loc = ConversionDB.GetCollection<Conversion>("Conversion");
+            loc.Insert(newitem);
+            loc.Delete(selecteditem.Id);
+            Conversion_Correction_ItemSelect.Items.Remove(selecteditem);
+            Conversion_Correction_ItemSelect.Items.Add(newitem);
+            Conversion_Correction_ItemSelect.SelectedItem = newitem;
+        }
+
+        private void label29_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Craftin_Recipes_AddRecipeItem_Click(object sender, EventArgs e)
+        {
+
+            string RecipeItemName = "";
+            string RecipeName = "";
+            int Amount = 0;
+            int Cost = 0;
+            bool newitem = false;
+            int LaborCost = 0;
+            bool newSubitem = false;
+            
+            if (Crafting_Recipes_RecipeName.Text != "")
+            {
+                RecipeName = Crafting_Recipes_RecipeName.Text;
+                newitem = true;
+            }
+            else
+            {
+                if (Crafting_Recipes_Recipe.SelectedItem != "")
+                {
+                    RecipeName = Crafting_Recipes_Recipe.SelectedItem.ToString();
+                }
+            }
+            if(!Int32.TryParse(Crafting_Recipes_LaborCost.Text,out LaborCost))
+            {
+                MessageBox.Show("LaborCost Must be at least 0 and a number");
+                return;
+            }
+            Crafting_Recipes_RecipeName.Text = "";
+            if (RecipeName == "")
+            {
+                MessageBox.Show("Recipe must be set/selected");
+                return;
+            }
+
+            if (Crafting_Recipes_RecipeItemName.Text != "")
+            {
+                RecipeItemName = Crafting_Recipes_RecipeItemName.Text;
+                newSubitem = true;
+            }
+            else
+            {
+                if(Crafting_Recipes_RecipeItem.SelectedItem != "")
+                {
+                    RecipeItemName = Crafting_Recipes_RecipeItem.SelectedItem.ToString();
+                }
+            }
+            if(RecipeItemName == "")
+            {
+                MessageBox.Show("Recipe Item must be set/selected");
+                return;
+            }
+            if(!Int32.TryParse(Crafting_Recipes_RecipeItemAmount.Text,out Amount))
+            {
+                MessageBox.Show("Amount either missing or not a number");
+                return;
+            }
+            Int32.TryParse(Crafting_Recipes_RecipeItemCost.Text, out Cost);
+            RecipeItem Item;
+            if(newitem)
+            {
+                Item = new RecipeItem();
+                Item.Amount = Amount;
+                Item.Name = RecipeName.Replace(" ", "_");
+                Item.vendorcost = Cost;
+                Item.LaborCost = LaborCost;
+                Crafting_Recipes_Recipe.Items.Add(Item);
+                Crafting_Recipes_RecipeItem.Items.Add(Item);
+                Crafting_Recipes_Recipe.SelectedItem = Item;
+            }
+            else
+            {
+                Item = (RecipeItem)Crafting_Recipes_Recipe.SelectedItem;
+                Crafting_Recipes_RecipeItem.Items.Remove(Item);
+
+                RecipeItem Subitem = new RecipeItem();
+                if(newSubitem)
+                {
+                    Subitem.Amount = Amount;
+                    Subitem.Name = RecipeName.Replace(" ", "_");
+                    Subitem.vendorcost = Cost;
+                    Subitem.LaborCost = LaborCost;
+                }
+                else
+                {
+                    Subitem = (RecipeItem) Crafting_Recipes_RecipeItem.SelectedItem;
+                }
+                Item.AddSubItem(Subitem);
+                Crafting_Recipes_RecipeItem.Items.Add(Item);
+            }
+        }
+
+        private void Crafting_Recipes_SaveRecipe_Click(object sender, EventArgs e)
+        {
+            foreach (RecipeItem item in Crafting_Recipes_Recipe.Items)
+            {
+                if(!item.saved)
+                {
+                    var col = RecipeDB.GetCollection<RecipeItem>("Recipe");
+                    col.Insert(item);
+                }
+            }
+        }
+
+        private void Crafting_Profit_Check_Click(object sender, EventArgs e)
+        {
+            var col = RecipeDB.GetCollection<RecipeItem>("Recipe");
+            var Recipes = col.FindAll();
+            foreach (RecipeItem item in Recipes)
+            {
+                int totalcost = 0;
+                int totallaborcost = 0;
+                if(item.vendorcost > 0)
+                {
+                    totalcost += item.vendorcost;
+                }
+                else
+                {
+                    var loc = InventoryDB.GetCollection<InventoryItem>(item.Name);
+                    var inventoryItems = loc.FindAll();
+                    int inventoryPrice = 999999999;
+                    foreach(var inventoryitem in inventoryItems)
+                    {
+                        int tempprice = (inventoryitem.gold * 100 * 100 + inventoryitem.silver * 100 + inventoryitem.copper);
+                        if (inventoryPrice > tempprice)
+                        {
+                            inventoryPrice = tempprice;
+                        }
+                    }
+                    
                 }
             }
         }

@@ -86,6 +86,12 @@ namespace Archage_Auction_House_Collector
             this.label8 = new System.Windows.Forms.Label();
             this.Inventory_NewItem = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.Conversion_Fix_Cost = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.Conversion_Profit_Percent = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
             this.Conversion_LaberCost = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.Conversion_Save_Btn = new System.Windows.Forms.Button();
@@ -103,9 +109,50 @@ namespace Archage_Auction_House_Collector
             this.BaseItem = new System.Windows.Forms.Label();
             this.Conversion_Result_Item = new System.Windows.Forms.ComboBox();
             this.Conversion_BaseItem = new System.Windows.Forms.ComboBox();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.Conversion_Correction_Delete = new System.Windows.Forms.Button();
+            this.Conversion_Correction_SaveBtn = new System.Windows.Forms.Button();
+            this.Conversion_Correction_LaborCost = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.Conversion_Correction_FixCost = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.Conversion_Correction_ResultITem = new System.Windows.Forms.ComboBox();
+            this.Conversion_Correction_ResultItemCount = new System.Windows.Forms.TextBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.Conversion_Correction_BaseItem = new System.Windows.Forms.ComboBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.Conversion_Correction_ItemSelect = new System.Windows.Forms.ComboBox();
+            this.Conversion_Correction_BaseItemCount = new System.Windows.Forms.TextBox();
+            this.Conversion_Correction_Source_ItemCount = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.label20 = new System.Windows.Forms.Label();
-            this.Conversion_Profit_Percent = new System.Windows.Forms.TextBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.label28 = new System.Windows.Forms.Label();
+            this.Crafting_Recipes_Recipe = new System.Windows.Forms.ComboBox();
+            this.Crafting_Recipes_RecipeName = new System.Windows.Forms.TextBox();
+            this.Crafting_Recipes_RecipeItem = new System.Windows.Forms.ComboBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.Crafting_Recipes_RecipeItemAmount = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.Craftin_Recipes_AddRecipeItem = new System.Windows.Forms.Button();
+            this.Crafting_Recipes_RecipeItemName = new System.Windows.Forms.TextBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.Crafting_Recipes_RecipeItemCost = new System.Windows.Forms.TextBox();
+            this.Crafting_Recipes_SaveRecipe = new System.Windows.Forms.Button();
+            this.Crafting_Profit_List = new System.Windows.Forms.CheckedListBox();
+            this.Crafting_Profit_Check = new System.Windows.Forms.Button();
+            this.Crafting_Profit_Calculate = new System.Windows.Forms.Button();
+            this.Crafting_Profit_Resources = new System.Windows.Forms.ListBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.Crafting_Recipes_LaborCost = new System.Windows.Forms.TextBox();
+            this.label33 = new System.Windows.Forms.Label();
+            this.Crafting_Recipes_Profit_LaborInMoney = new System.Windows.Forms.TextBox();
+            this.Crafting_Profit_Profit = new System.Windows.Forms.TextBox();
+            this.label34 = new System.Windows.Forms.Label();
             this.Tabs.SuspendLayout();
             this.DataEntry.SuspendLayout();
             this.DataExploration.SuspendLayout();
@@ -113,6 +160,13 @@ namespace Archage_Auction_House_Collector
             this.SellingTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            this.tabPage7.SuspendLayout();
             this.SuspendLayout();
             // 
             // ItemNameLabel
@@ -126,6 +180,8 @@ namespace Archage_Auction_House_Collector
             // 
             // ItemName
             // 
+            this.ItemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.ItemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.ItemName.Location = new System.Drawing.Point(6, 19);
             this.ItemName.Name = "ItemName";
             this.ItemName.Size = new System.Drawing.Size(147, 20);
@@ -175,6 +231,8 @@ namespace Archage_Auction_House_Collector
             // 
             // Measurment
             // 
+            this.Measurment.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.Measurment.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.Measurment.FormattingEnabled = true;
             this.Measurment.Location = new System.Drawing.Point(9, 32);
             this.Measurment.Name = "Measurment";
@@ -199,10 +257,11 @@ namespace Archage_Auction_House_Collector
             this.Tabs.Controls.Add(this.SellingTab);
             this.Tabs.Controls.Add(this.tabPage1);
             this.Tabs.Controls.Add(this.tabPage2);
+            this.Tabs.Controls.Add(this.tabPage3);
             this.Tabs.Location = new System.Drawing.Point(-2, -1);
             this.Tabs.Name = "Tabs";
             this.Tabs.SelectedIndex = 0;
-            this.Tabs.Size = new System.Drawing.Size(571, 231);
+            this.Tabs.Size = new System.Drawing.Size(614, 310);
             this.Tabs.TabIndex = 11;
             // 
             // DataEntry
@@ -218,13 +277,15 @@ namespace Archage_Auction_House_Collector
             this.DataEntry.Location = new System.Drawing.Point(4, 22);
             this.DataEntry.Name = "DataEntry";
             this.DataEntry.Padding = new System.Windows.Forms.Padding(3);
-            this.DataEntry.Size = new System.Drawing.Size(563, 205);
+            this.DataEntry.Size = new System.Drawing.Size(606, 284);
             this.DataEntry.TabIndex = 0;
             this.DataEntry.Text = "Data entry";
             this.DataEntry.UseVisualStyleBackColor = true;
             // 
             // ItemNameComboBox
             // 
+            this.ItemNameComboBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.ItemNameComboBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.ItemNameComboBox.FormattingEnabled = true;
             this.ItemNameComboBox.Location = new System.Drawing.Point(6, 45);
             this.ItemNameComboBox.Name = "ItemNameComboBox";
@@ -242,7 +303,7 @@ namespace Archage_Auction_House_Collector
             this.DataExploration.Location = new System.Drawing.Point(4, 22);
             this.DataExploration.Name = "DataExploration";
             this.DataExploration.Padding = new System.Windows.Forms.Padding(3);
-            this.DataExploration.Size = new System.Drawing.Size(563, 205);
+            this.DataExploration.Size = new System.Drawing.Size(606, 284);
             this.DataExploration.TabIndex = 1;
             this.DataExploration.Text = "Data exploration";
             this.DataExploration.UseVisualStyleBackColor = true;
@@ -298,7 +359,7 @@ namespace Archage_Auction_House_Collector
             this.PointTab.Location = new System.Drawing.Point(4, 22);
             this.PointTab.Name = "PointTab";
             this.PointTab.Padding = new System.Windows.Forms.Padding(3);
-            this.PointTab.Size = new System.Drawing.Size(563, 205);
+            this.PointTab.Size = new System.Drawing.Size(606, 284);
             this.PointTab.TabIndex = 3;
             this.PointTab.Text = "Point deletion";
             this.PointTab.UseVisualStyleBackColor = true;
@@ -357,7 +418,7 @@ namespace Archage_Auction_House_Collector
             this.SellingTab.Location = new System.Drawing.Point(4, 22);
             this.SellingTab.Name = "SellingTab";
             this.SellingTab.Padding = new System.Windows.Forms.Padding(3);
-            this.SellingTab.Size = new System.Drawing.Size(563, 205);
+            this.SellingTab.Size = new System.Drawing.Size(606, 284);
             this.SellingTab.TabIndex = 4;
             this.SellingTab.Text = "Selling";
             this.SellingTab.UseVisualStyleBackColor = true;
@@ -498,7 +559,7 @@ namespace Archage_Auction_House_Collector
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(563, 205);
+            this.tabPage1.Size = new System.Drawing.Size(606, 284);
             this.tabPage1.TabIndex = 5;
             this.tabPage1.Text = "Inventory";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -658,55 +719,110 @@ namespace Archage_Auction_House_Collector
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.Conversion_Profit_Percent);
-            this.tabPage2.Controls.Add(this.label20);
-            this.tabPage2.Controls.Add(this.Conversion_LaberCost);
-            this.tabPage2.Controls.Add(this.label17);
-            this.tabPage2.Controls.Add(this.Conversion_Save_Btn);
-            this.tabPage2.Controls.Add(this.label19);
-            this.tabPage2.Controls.Add(this.label18);
-            this.tabPage2.Controls.Add(this.Conversion_Base_Count);
-            this.tabPage2.Controls.Add(this.label16);
-            this.tabPage2.Controls.Add(this.Conversion_Result_Count);
-            this.tabPage2.Controls.Add(this.Conversion_Check);
-            this.tabPage2.Controls.Add(this.Conversion_Profit);
-            this.tabPage2.Controls.Add(this.Conversion_Rule_Applicableg);
-            this.tabPage2.Controls.Add(this.Conversion_Workers_Compensation_Potion);
-            this.tabPage2.Controls.Add(this.label14);
-            this.tabPage2.Controls.Add(this.label15);
-            this.tabPage2.Controls.Add(this.BaseItem);
-            this.tabPage2.Controls.Add(this.Conversion_Result_Item);
-            this.tabPage2.Controls.Add(this.Conversion_BaseItem);
+            this.tabPage2.Controls.Add(this.tabControl1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(563, 205);
+            this.tabPage2.Size = new System.Drawing.Size(606, 284);
             this.tabPage2.TabIndex = 6;
             this.tabPage2.Text = "Conversion";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Location = new System.Drawing.Point(1, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(611, 285);
+            this.tabControl1.TabIndex = 0;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.Conversion_Fix_Cost);
+            this.tabPage4.Controls.Add(this.label21);
+            this.tabPage4.Controls.Add(this.Conversion_Profit_Percent);
+            this.tabPage4.Controls.Add(this.label20);
+            this.tabPage4.Controls.Add(this.Conversion_LaberCost);
+            this.tabPage4.Controls.Add(this.label17);
+            this.tabPage4.Controls.Add(this.Conversion_Save_Btn);
+            this.tabPage4.Controls.Add(this.label19);
+            this.tabPage4.Controls.Add(this.label18);
+            this.tabPage4.Controls.Add(this.Conversion_Base_Count);
+            this.tabPage4.Controls.Add(this.label16);
+            this.tabPage4.Controls.Add(this.Conversion_Result_Count);
+            this.tabPage4.Controls.Add(this.Conversion_Check);
+            this.tabPage4.Controls.Add(this.Conversion_Profit);
+            this.tabPage4.Controls.Add(this.Conversion_Rule_Applicableg);
+            this.tabPage4.Controls.Add(this.Conversion_Workers_Compensation_Potion);
+            this.tabPage4.Controls.Add(this.label14);
+            this.tabPage4.Controls.Add(this.label15);
+            this.tabPage4.Controls.Add(this.BaseItem);
+            this.tabPage4.Controls.Add(this.Conversion_Result_Item);
+            this.tabPage4.Controls.Add(this.Conversion_BaseItem);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(603, 259);
+            this.tabPage4.TabIndex = 0;
+            this.tabPage4.Text = "Entry/Check";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // Conversion_Fix_Cost
+            // 
+            this.Conversion_Fix_Cost.Location = new System.Drawing.Point(126, 65);
+            this.Conversion_Fix_Cost.Name = "Conversion_Fix_Cost";
+            this.Conversion_Fix_Cost.Size = new System.Drawing.Size(100, 20);
+            this.Conversion_Fix_Cost.TabIndex = 41;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(124, 49);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(44, 13);
+            this.label21.TabIndex = 40;
+            this.label21.Text = "Fix Cost";
+            // 
+            // Conversion_Profit_Percent
+            // 
+            this.Conversion_Profit_Percent.Location = new System.Drawing.Point(400, 74);
+            this.Conversion_Profit_Percent.Name = "Conversion_Profit_Percent";
+            this.Conversion_Profit_Percent.Size = new System.Drawing.Size(100, 20);
+            this.Conversion_Profit_Percent.TabIndex = 39;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(397, 58);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(42, 13);
+            this.label20.TabIndex = 38;
+            this.label20.Text = "Profit %";
+            // 
             // Conversion_LaberCost
             // 
-            this.Conversion_LaberCost.Location = new System.Drawing.Point(13, 63);
+            this.Conversion_LaberCost.Location = new System.Drawing.Point(11, 64);
             this.Conversion_LaberCost.Name = "Conversion_LaberCost";
             this.Conversion_LaberCost.Size = new System.Drawing.Size(100, 20);
-            this.Conversion_LaberCost.TabIndex = 18;
+            this.Conversion_LaberCost.TabIndex = 37;
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(11, 47);
+            this.label17.Location = new System.Drawing.Point(9, 48);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(58, 13);
-            this.label17.TabIndex = 17;
+            this.label17.TabIndex = 36;
             this.label17.Text = "Labor Cost";
             // 
             // Conversion_Save_Btn
             // 
-            this.Conversion_Save_Btn.Location = new System.Drawing.Point(13, 141);
+            this.Conversion_Save_Btn.Location = new System.Drawing.Point(11, 142);
             this.Conversion_Save_Btn.Name = "Conversion_Save_Btn";
             this.Conversion_Save_Btn.Size = new System.Drawing.Size(147, 23);
-            this.Conversion_Save_Btn.TabIndex = 16;
+            this.Conversion_Save_Btn.TabIndex = 35;
             this.Conversion_Save_Btn.Text = "Save";
             this.Conversion_Save_Btn.UseVisualStyleBackColor = true;
             this.Conversion_Save_Btn.Click += new System.EventHandler(this.Conversion_Save_Btn_Click);
@@ -715,51 +831,51 @@ namespace Archage_Auction_House_Collector
             // 
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label19.Location = new System.Drawing.Point(262, 27);
+            this.label19.Location = new System.Drawing.Point(260, 28);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(17, 18);
-            this.label19.TabIndex = 15;
+            this.label19.TabIndex = 34;
             this.label19.Text = "=";
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(10, 8);
+            this.label18.Location = new System.Drawing.Point(8, 9);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(56, 13);
-            this.label18.TabIndex = 13;
+            this.label18.TabIndex = 33;
             this.label18.Text = "item count";
             // 
             // Conversion_Base_Count
             // 
-            this.Conversion_Base_Count.Location = new System.Drawing.Point(13, 24);
+            this.Conversion_Base_Count.Location = new System.Drawing.Point(11, 25);
             this.Conversion_Base_Count.Name = "Conversion_Base_Count";
             this.Conversion_Base_Count.Size = new System.Drawing.Size(100, 20);
-            this.Conversion_Base_Count.TabIndex = 12;
+            this.Conversion_Base_Count.TabIndex = 32;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(291, 8);
+            this.label16.Location = new System.Drawing.Point(289, 9);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(56, 13);
-            this.label16.TabIndex = 10;
+            this.label16.TabIndex = 31;
             this.label16.Text = "item count";
             this.label16.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // Conversion_Result_Count
             // 
-            this.Conversion_Result_Count.Location = new System.Drawing.Point(294, 24);
+            this.Conversion_Result_Count.Location = new System.Drawing.Point(292, 25);
             this.Conversion_Result_Count.Name = "Conversion_Result_Count";
             this.Conversion_Result_Count.Size = new System.Drawing.Size(100, 20);
-            this.Conversion_Result_Count.TabIndex = 9;
+            this.Conversion_Result_Count.TabIndex = 30;
             // 
             // Conversion_Check
             // 
-            this.Conversion_Check.Location = new System.Drawing.Point(14, 170);
+            this.Conversion_Check.Location = new System.Drawing.Point(12, 171);
             this.Conversion_Check.Name = "Conversion_Check";
             this.Conversion_Check.Size = new System.Drawing.Size(146, 23);
-            this.Conversion_Check.TabIndex = 8;
+            this.Conversion_Check.TabIndex = 29;
             this.Conversion_Check.Text = "Check";
             this.Conversion_Check.UseVisualStyleBackColor = true;
             this.Conversion_Check.Click += new System.EventHandler(this.Conversion_Check_Click);
@@ -767,93 +883,492 @@ namespace Archage_Auction_House_Collector
             // Conversion_Profit
             // 
             this.Conversion_Profit.AutoSize = true;
-            this.Conversion_Profit.Location = new System.Drawing.Point(193, 83);
+            this.Conversion_Profit.Location = new System.Drawing.Point(191, 97);
             this.Conversion_Profit.Name = "Conversion_Profit";
             this.Conversion_Profit.Size = new System.Drawing.Size(152, 13);
-            this.Conversion_Profit.TabIndex = 7;
+            this.Conversion_Profit.TabIndex = 28;
             this.Conversion_Profit.Text = "Conversion_Auction_Profitable";
             // 
             // Conversion_Rule_Applicableg
             // 
             this.Conversion_Rule_Applicableg.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)), true);
             this.Conversion_Rule_Applicableg.FormattingEnabled = true;
-            this.Conversion_Rule_Applicableg.Location = new System.Drawing.Point(196, 99);
+            this.Conversion_Rule_Applicableg.Location = new System.Drawing.Point(194, 113);
             this.Conversion_Rule_Applicableg.Name = "Conversion_Rule_Applicableg";
-            this.Conversion_Rule_Applicableg.Size = new System.Drawing.Size(360, 82);
-            this.Conversion_Rule_Applicableg.TabIndex = 6;
+            this.Conversion_Rule_Applicableg.Size = new System.Drawing.Size(359, 134);
+            this.Conversion_Rule_Applicableg.TabIndex = 27;
             // 
             // Conversion_Workers_Compensation_Potion
             // 
-            this.Conversion_Workers_Compensation_Potion.Location = new System.Drawing.Point(13, 99);
+            this.Conversion_Workers_Compensation_Potion.Location = new System.Drawing.Point(11, 107);
             this.Conversion_Workers_Compensation_Potion.Name = "Conversion_Workers_Compensation_Potion";
             this.Conversion_Workers_Compensation_Potion.Size = new System.Drawing.Size(147, 20);
-            this.Conversion_Workers_Compensation_Potion.TabIndex = 5;
+            this.Conversion_Workers_Compensation_Potion.TabIndex = 26;
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(10, 83);
+            this.label14.Location = new System.Drawing.Point(8, 91);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(150, 13);
-            this.label14.TabIndex = 4;
+            this.label14.TabIndex = 25;
             this.label14.Text = "Workers Compensation Potion";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(399, 8);
+            this.label15.Location = new System.Drawing.Point(397, 9);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(60, 13);
-            this.label15.TabIndex = 3;
+            this.label15.TabIndex = 24;
             this.label15.Text = "Result Item";
             // 
             // BaseItem
             // 
             this.BaseItem.AutoSize = true;
-            this.BaseItem.Location = new System.Drawing.Point(126, 8);
+            this.BaseItem.Location = new System.Drawing.Point(124, 9);
             this.BaseItem.Name = "BaseItem";
             this.BaseItem.Size = new System.Drawing.Size(54, 13);
-            this.BaseItem.TabIndex = 2;
+            this.BaseItem.TabIndex = 23;
             this.BaseItem.Text = "Base Item";
             // 
             // Conversion_Result_Item
             // 
             this.Conversion_Result_Item.FormattingEnabled = true;
-            this.Conversion_Result_Item.Location = new System.Drawing.Point(402, 24);
+            this.Conversion_Result_Item.Location = new System.Drawing.Point(400, 25);
             this.Conversion_Result_Item.Name = "Conversion_Result_Item";
             this.Conversion_Result_Item.Size = new System.Drawing.Size(121, 21);
-            this.Conversion_Result_Item.TabIndex = 1;
+            this.Conversion_Result_Item.TabIndex = 22;
             // 
             // Conversion_BaseItem
             // 
             this.Conversion_BaseItem.FormattingEnabled = true;
-            this.Conversion_BaseItem.Location = new System.Drawing.Point(126, 24);
+            this.Conversion_BaseItem.Location = new System.Drawing.Point(124, 25);
             this.Conversion_BaseItem.Name = "Conversion_BaseItem";
             this.Conversion_BaseItem.Size = new System.Drawing.Size(121, 21);
-            this.Conversion_BaseItem.TabIndex = 0;
+            this.Conversion_BaseItem.TabIndex = 21;
             // 
-            // label20
+            // tabPage5
             // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(399, 57);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(42, 13);
-            this.label20.TabIndex = 19;
-            this.label20.Text = "Profit %";
+            this.tabPage5.Controls.Add(this.Conversion_Correction_Delete);
+            this.tabPage5.Controls.Add(this.Conversion_Correction_SaveBtn);
+            this.tabPage5.Controls.Add(this.Conversion_Correction_LaborCost);
+            this.tabPage5.Controls.Add(this.label27);
+            this.tabPage5.Controls.Add(this.Conversion_Correction_FixCost);
+            this.tabPage5.Controls.Add(this.label26);
+            this.tabPage5.Controls.Add(this.label24);
+            this.tabPage5.Controls.Add(this.Conversion_Correction_ResultITem);
+            this.tabPage5.Controls.Add(this.Conversion_Correction_ResultItemCount);
+            this.tabPage5.Controls.Add(this.label25);
+            this.tabPage5.Controls.Add(this.label22);
+            this.tabPage5.Controls.Add(this.Conversion_Correction_BaseItem);
+            this.tabPage5.Controls.Add(this.label23);
+            this.tabPage5.Controls.Add(this.Conversion_Correction_ItemSelect);
+            this.tabPage5.Controls.Add(this.Conversion_Correction_BaseItemCount);
+            this.tabPage5.Controls.Add(this.Conversion_Correction_Source_ItemCount);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(603, 259);
+            this.tabPage5.TabIndex = 1;
+            this.tabPage5.Text = "Correction";
+            this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // Conversion_Profit_Percent
+            // Conversion_Correction_Delete
             // 
-            this.Conversion_Profit_Percent.Location = new System.Drawing.Point(402, 73);
-            this.Conversion_Profit_Percent.Name = "Conversion_Profit_Percent";
-            this.Conversion_Profit_Percent.Size = new System.Drawing.Size(100, 20);
-            this.Conversion_Profit_Percent.TabIndex = 20;
+            this.Conversion_Correction_Delete.Location = new System.Drawing.Point(12, 60);
+            this.Conversion_Correction_Delete.Name = "Conversion_Correction_Delete";
+            this.Conversion_Correction_Delete.Size = new System.Drawing.Size(121, 37);
+            this.Conversion_Correction_Delete.TabIndex = 35;
+            this.Conversion_Correction_Delete.Text = "Delete";
+            this.Conversion_Correction_Delete.UseVisualStyleBackColor = true;
+            this.Conversion_Correction_Delete.Click += new System.EventHandler(this.Conversion_Correction_Delete_Click);
+            // 
+            // Conversion_Correction_SaveBtn
+            // 
+            this.Conversion_Correction_SaveBtn.Location = new System.Drawing.Point(408, 120);
+            this.Conversion_Correction_SaveBtn.Name = "Conversion_Correction_SaveBtn";
+            this.Conversion_Correction_SaveBtn.Size = new System.Drawing.Size(100, 39);
+            this.Conversion_Correction_SaveBtn.TabIndex = 34;
+            this.Conversion_Correction_SaveBtn.Text = "Update";
+            this.Conversion_Correction_SaveBtn.UseVisualStyleBackColor = true;
+            this.Conversion_Correction_SaveBtn.Click += new System.EventHandler(this.Conversion_Correction_SaveBtn_Click);
+            // 
+            // Conversion_Correction_LaborCost
+            // 
+            this.Conversion_Correction_LaborCost.Location = new System.Drawing.Point(408, 76);
+            this.Conversion_Correction_LaborCost.Name = "Conversion_Correction_LaborCost";
+            this.Conversion_Correction_LaborCost.Size = new System.Drawing.Size(100, 20);
+            this.Conversion_Correction_LaborCost.TabIndex = 33;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(405, 60);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(58, 13);
+            this.label27.TabIndex = 32;
+            this.label27.Text = "Labor Cost";
+            // 
+            // Conversion_Correction_FixCost
+            // 
+            this.Conversion_Correction_FixCost.Location = new System.Drawing.Point(408, 25);
+            this.Conversion_Correction_FixCost.Name = "Conversion_Correction_FixCost";
+            this.Conversion_Correction_FixCost.Size = new System.Drawing.Size(100, 20);
+            this.Conversion_Correction_FixCost.TabIndex = 31;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(405, 9);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(43, 13);
+            this.label26.TabIndex = 30;
+            this.label26.Text = "Fix cost";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(158, 60);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(60, 13);
+            this.label24.TabIndex = 29;
+            this.label24.Text = "Result Item";
+            // 
+            // Conversion_Correction_ResultITem
+            // 
+            this.Conversion_Correction_ResultITem.FormattingEnabled = true;
+            this.Conversion_Correction_ResultITem.Location = new System.Drawing.Point(158, 76);
+            this.Conversion_Correction_ResultITem.Name = "Conversion_Correction_ResultITem";
+            this.Conversion_Correction_ResultITem.Size = new System.Drawing.Size(121, 21);
+            this.Conversion_Correction_ResultITem.TabIndex = 28;
+            // 
+            // Conversion_Correction_ResultItemCount
+            // 
+            this.Conversion_Correction_ResultItemCount.Location = new System.Drawing.Point(288, 76);
+            this.Conversion_Correction_ResultItemCount.Name = "Conversion_Correction_ResultItemCount";
+            this.Conversion_Correction_ResultItemCount.Size = new System.Drawing.Size(100, 20);
+            this.Conversion_Correction_ResultItemCount.TabIndex = 27;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(285, 60);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(53, 13);
+            this.label25.TabIndex = 26;
+            this.label25.Text = "itemcount";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(158, 9);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(64, 13);
+            this.label22.TabIndex = 25;
+            this.label22.Text = "Source Item";
+            // 
+            // Conversion_Correction_BaseItem
+            // 
+            this.Conversion_Correction_BaseItem.FormattingEnabled = true;
+            this.Conversion_Correction_BaseItem.Location = new System.Drawing.Point(158, 25);
+            this.Conversion_Correction_BaseItem.Name = "Conversion_Correction_BaseItem";
+            this.Conversion_Correction_BaseItem.Size = new System.Drawing.Size(121, 21);
+            this.Conversion_Correction_BaseItem.TabIndex = 24;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(9, 9);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(60, 13);
+            this.label23.TabIndex = 3;
+            this.label23.Text = "Conversion";
+            // 
+            // Conversion_Correction_ItemSelect
+            // 
+            this.Conversion_Correction_ItemSelect.FormattingEnabled = true;
+            this.Conversion_Correction_ItemSelect.Location = new System.Drawing.Point(12, 25);
+            this.Conversion_Correction_ItemSelect.Name = "Conversion_Correction_ItemSelect";
+            this.Conversion_Correction_ItemSelect.Size = new System.Drawing.Size(121, 21);
+            this.Conversion_Correction_ItemSelect.TabIndex = 2;
+            this.Conversion_Correction_ItemSelect.SelectedIndexChanged += new System.EventHandler(this.Conversion_Correction_ItemSelect_SelectedIndexChanged);
+            // 
+            // Conversion_Correction_BaseItemCount
+            // 
+            this.Conversion_Correction_BaseItemCount.Location = new System.Drawing.Point(288, 25);
+            this.Conversion_Correction_BaseItemCount.Name = "Conversion_Correction_BaseItemCount";
+            this.Conversion_Correction_BaseItemCount.Size = new System.Drawing.Size(100, 20);
+            this.Conversion_Correction_BaseItemCount.TabIndex = 1;
+            // 
+            // Conversion_Correction_Source_ItemCount
+            // 
+            this.Conversion_Correction_Source_ItemCount.AutoSize = true;
+            this.Conversion_Correction_Source_ItemCount.Location = new System.Drawing.Point(285, 9);
+            this.Conversion_Correction_Source_ItemCount.Name = "Conversion_Correction_Source_ItemCount";
+            this.Conversion_Correction_Source_ItemCount.Size = new System.Drawing.Size(53, 13);
+            this.Conversion_Correction_Source_ItemCount.TabIndex = 0;
+            this.Conversion_Correction_Source_ItemCount.Text = "itemcount";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.tabControl2);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(606, 284);
+            this.tabPage3.TabIndex = 7;
+            this.tabPage3.Text = "Crafting";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tabControl2
+            // 
+            this.tabControl2.Controls.Add(this.tabPage6);
+            this.tabControl2.Controls.Add(this.tabPage7);
+            this.tabControl2.Location = new System.Drawing.Point(0, 0);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(600, 278);
+            this.tabControl2.TabIndex = 0;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.label32);
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_LaborCost);
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_SaveRecipe);
+            this.tabPage6.Controls.Add(this.label31);
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_RecipeItemCost);
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_RecipeItemName);
+            this.tabPage6.Controls.Add(this.Craftin_Recipes_AddRecipeItem);
+            this.tabPage6.Controls.Add(this.label30);
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_RecipeItemAmount);
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_RecipeItem);
+            this.tabPage6.Controls.Add(this.label29);
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_RecipeName);
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_Recipe);
+            this.tabPage6.Controls.Add(this.label28);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(592, 252);
+            this.tabPage6.TabIndex = 0;
+            this.tabPage6.Text = "Recipes";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.Crafting_Profit_Profit);
+            this.tabPage7.Controls.Add(this.label34);
+            this.tabPage7.Controls.Add(this.Crafting_Recipes_Profit_LaborInMoney);
+            this.tabPage7.Controls.Add(this.label33);
+            this.tabPage7.Controls.Add(this.Crafting_Profit_Resources);
+            this.tabPage7.Controls.Add(this.Crafting_Profit_Calculate);
+            this.tabPage7.Controls.Add(this.Crafting_Profit_Check);
+            this.tabPage7.Controls.Add(this.Crafting_Profit_List);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(592, 252);
+            this.tabPage7.TabIndex = 1;
+            this.tabPage7.Text = "Profit";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(6, 11);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(41, 13);
+            this.label28.TabIndex = 0;
+            this.label28.Text = "Recipe";
+            // 
+            // Crafting_Recipes_Recipe
+            // 
+            this.Crafting_Recipes_Recipe.FormattingEnabled = true;
+            this.Crafting_Recipes_Recipe.Location = new System.Drawing.Point(9, 27);
+            this.Crafting_Recipes_Recipe.Name = "Crafting_Recipes_Recipe";
+            this.Crafting_Recipes_Recipe.Size = new System.Drawing.Size(121, 21);
+            this.Crafting_Recipes_Recipe.TabIndex = 1;
+            // 
+            // Crafting_Recipes_RecipeName
+            // 
+            this.Crafting_Recipes_RecipeName.Location = new System.Drawing.Point(9, 54);
+            this.Crafting_Recipes_RecipeName.Name = "Crafting_Recipes_RecipeName";
+            this.Crafting_Recipes_RecipeName.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_RecipeName.TabIndex = 2;
+            // 
+            // Crafting_Recipes_RecipeItem
+            // 
+            this.Crafting_Recipes_RecipeItem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.Crafting_Recipes_RecipeItem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.Crafting_Recipes_RecipeItem.FormattingEnabled = true;
+            this.Crafting_Recipes_RecipeItem.Location = new System.Drawing.Point(187, 27);
+            this.Crafting_Recipes_RecipeItem.Name = "Crafting_Recipes_RecipeItem";
+            this.Crafting_Recipes_RecipeItem.Size = new System.Drawing.Size(121, 21);
+            this.Crafting_Recipes_RecipeItem.TabIndex = 4;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(184, 11);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(64, 13);
+            this.label29.TabIndex = 3;
+            this.label29.Text = "Recipe Item";
+            this.label29.Click += new System.EventHandler(this.label29_Click);
+            // 
+            // Crafting_Recipes_RecipeItemAmount
+            // 
+            this.Crafting_Recipes_RecipeItemAmount.Location = new System.Drawing.Point(327, 44);
+            this.Crafting_Recipes_RecipeItemAmount.Name = "Crafting_Recipes_RecipeItemAmount";
+            this.Crafting_Recipes_RecipeItemAmount.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_RecipeItemAmount.TabIndex = 5;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(324, 27);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(43, 13);
+            this.label30.TabIndex = 6;
+            this.label30.Text = "Amount";
+            // 
+            // Craftin_Recipes_AddRecipeItem
+            // 
+            this.Craftin_Recipes_AddRecipeItem.Location = new System.Drawing.Point(463, 125);
+            this.Craftin_Recipes_AddRecipeItem.Name = "Craftin_Recipes_AddRecipeItem";
+            this.Craftin_Recipes_AddRecipeItem.Size = new System.Drawing.Size(98, 23);
+            this.Craftin_Recipes_AddRecipeItem.TabIndex = 7;
+            this.Craftin_Recipes_AddRecipeItem.Text = "Add RecipeItem";
+            this.Craftin_Recipes_AddRecipeItem.UseVisualStyleBackColor = true;
+            this.Craftin_Recipes_AddRecipeItem.Click += new System.EventHandler(this.Craftin_Recipes_AddRecipeItem_Click);
+            // 
+            // Crafting_Recipes_RecipeItemName
+            // 
+            this.Crafting_Recipes_RecipeItemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.Crafting_Recipes_RecipeItemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.Crafting_Recipes_RecipeItemName.Location = new System.Drawing.Point(187, 58);
+            this.Crafting_Recipes_RecipeItemName.Name = "Crafting_Recipes_RecipeItemName";
+            this.Crafting_Recipes_RecipeItemName.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_RecipeItemName.TabIndex = 8;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(449, 27);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(28, 13);
+            this.label31.TabIndex = 16;
+            this.label31.Text = "Cost";
+            // 
+            // Crafting_Recipes_RecipeItemCost
+            // 
+            this.Crafting_Recipes_RecipeItemCost.Location = new System.Drawing.Point(452, 44);
+            this.Crafting_Recipes_RecipeItemCost.Name = "Crafting_Recipes_RecipeItemCost";
+            this.Crafting_Recipes_RecipeItemCost.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_RecipeItemCost.TabIndex = 15;
+            // 
+            // Crafting_Recipes_SaveRecipe
+            // 
+            this.Crafting_Recipes_SaveRecipe.Location = new System.Drawing.Point(9, 209);
+            this.Crafting_Recipes_SaveRecipe.Name = "Crafting_Recipes_SaveRecipe";
+            this.Crafting_Recipes_SaveRecipe.Size = new System.Drawing.Size(98, 23);
+            this.Crafting_Recipes_SaveRecipe.TabIndex = 17;
+            this.Crafting_Recipes_SaveRecipe.Text = "Save Recipe";
+            this.Crafting_Recipes_SaveRecipe.UseVisualStyleBackColor = true;
+            this.Crafting_Recipes_SaveRecipe.Click += new System.EventHandler(this.Crafting_Recipes_SaveRecipe_Click);
+            // 
+            // Crafting_Profit_List
+            // 
+            this.Crafting_Profit_List.FormattingEnabled = true;
+            this.Crafting_Profit_List.Location = new System.Drawing.Point(2, 36);
+            this.Crafting_Profit_List.Name = "Crafting_Profit_List";
+            this.Crafting_Profit_List.Size = new System.Drawing.Size(324, 214);
+            this.Crafting_Profit_List.TabIndex = 0;
+            // 
+            // Crafting_Profit_Check
+            // 
+            this.Crafting_Profit_Check.Location = new System.Drawing.Point(341, 223);
+            this.Crafting_Profit_Check.Name = "Crafting_Profit_Check";
+            this.Crafting_Profit_Check.Size = new System.Drawing.Size(85, 23);
+            this.Crafting_Profit_Check.TabIndex = 4;
+            this.Crafting_Profit_Check.Text = "Check";
+            this.Crafting_Profit_Check.UseVisualStyleBackColor = true;
+            this.Crafting_Profit_Check.Click += new System.EventHandler(this.Crafting_Profit_Check_Click);
+            // 
+            // Crafting_Profit_Calculate
+            // 
+            this.Crafting_Profit_Calculate.Location = new System.Drawing.Point(511, 223);
+            this.Crafting_Profit_Calculate.Name = "Crafting_Profit_Calculate";
+            this.Crafting_Profit_Calculate.Size = new System.Drawing.Size(75, 23);
+            this.Crafting_Profit_Calculate.TabIndex = 5;
+            this.Crafting_Profit_Calculate.Text = "Calculate Resources";
+            this.Crafting_Profit_Calculate.UseVisualStyleBackColor = true;
+            // 
+            // Crafting_Profit_Resources
+            // 
+            this.Crafting_Profit_Resources.FormattingEnabled = true;
+            this.Crafting_Profit_Resources.Location = new System.Drawing.Point(341, 6);
+            this.Crafting_Profit_Resources.Name = "Crafting_Profit_Resources";
+            this.Crafting_Profit_Resources.Size = new System.Drawing.Size(245, 212);
+            this.Crafting_Profit_Resources.TabIndex = 6;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(449, 67);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(55, 13);
+            this.label32.TabIndex = 19;
+            this.label32.Text = "LaborCost";
+            // 
+            // Crafting_Recipes_LaborCost
+            // 
+            this.Crafting_Recipes_LaborCost.Location = new System.Drawing.Point(452, 84);
+            this.Crafting_Recipes_LaborCost.Name = "Crafting_Recipes_LaborCost";
+            this.Crafting_Recipes_LaborCost.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_LaborCost.TabIndex = 18;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label33.Location = new System.Drawing.Point(3, 10);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(91, 12);
+            this.label33.TabIndex = 5;
+            this.label33.Text = "Workers Potion Price";
+            // 
+            // Crafting_Recipes_Profit_LaborInMoney
+            // 
+            this.Crafting_Recipes_Profit_LaborInMoney.Location = new System.Drawing.Point(100, 6);
+            this.Crafting_Recipes_Profit_LaborInMoney.Name = "Crafting_Recipes_Profit_LaborInMoney";
+            this.Crafting_Recipes_Profit_LaborInMoney.Size = new System.Drawing.Size(100, 20);
+            this.Crafting_Recipes_Profit_LaborInMoney.TabIndex = 8;
+            // 
+            // Crafting_Profit_Profit
+            // 
+            this.Crafting_Profit_Profit.Location = new System.Drawing.Point(248, 10);
+            this.Crafting_Profit_Profit.Name = "Crafting_Profit_Profit";
+            this.Crafting_Profit_Profit.Size = new System.Drawing.Size(44, 20);
+            this.Crafting_Profit_Profit.TabIndex = 10;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label34.Location = new System.Drawing.Point(205, 14);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(37, 12);
+            this.label34.TabIndex = 9;
+            this.label34.Text = "Profit %";
             // 
             // Archage_AH_DataCollector
             // 
             this.AccessibleName = "AH_DataCollector_Window";
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(570, 226);
+            this.ClientSize = new System.Drawing.Size(615, 310);
             this.Controls.Add(this.Tabs);
             this.Name = "Archage_AH_DataCollector";
             this.Text = "           ";
@@ -871,7 +1386,17 @@ namespace Archage_Auction_House_Collector
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.tabPage5.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
+            this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -934,25 +1459,72 @@ namespace Archage_Auction_House_Collector
         private System.Windows.Forms.TextBox Inventory_AveragePrice;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TextBox Conversion_Fix_Cost;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox Conversion_Profit_Percent;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox Conversion_LaberCost;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Button Conversion_Save_Btn;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox Conversion_Base_Count;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox Conversion_Result_Count;
+        private System.Windows.Forms.Button Conversion_Check;
+        private System.Windows.Forms.Label Conversion_Profit;
+        private System.Windows.Forms.CheckedListBox Conversion_Rule_Applicableg;
         private System.Windows.Forms.TextBox Conversion_Workers_Compensation_Potion;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label BaseItem;
         private System.Windows.Forms.ComboBox Conversion_Result_Item;
         private System.Windows.Forms.ComboBox Conversion_BaseItem;
-        private System.Windows.Forms.Button Conversion_Check;
-        private System.Windows.Forms.Label Conversion_Profit;
-        private System.Windows.Forms.CheckedListBox Conversion_Rule_Applicableg;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.TextBox Conversion_Base_Count;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox Conversion_Result_Count;
-        private System.Windows.Forms.Button Conversion_Save_Btn;
-        private System.Windows.Forms.TextBox Conversion_LaberCost;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox Conversion_Profit_Percent;
-        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.ComboBox Conversion_Correction_ItemSelect;
+        private System.Windows.Forms.TextBox Conversion_Correction_BaseItemCount;
+        private System.Windows.Forms.Label Conversion_Correction_Source_ItemCount;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.ComboBox Conversion_Correction_BaseItem;
+        private System.Windows.Forms.Button Conversion_Correction_SaveBtn;
+        private System.Windows.Forms.TextBox Conversion_Correction_LaborCost;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox Conversion_Correction_FixCost;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.ComboBox Conversion_Correction_ResultITem;
+        private System.Windows.Forms.TextBox Conversion_Correction_ResultItemCount;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Button Conversion_Correction_Delete;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TextBox Crafting_Recipes_RecipeName;
+        private System.Windows.Forms.ComboBox Crafting_Recipes_Recipe;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.ComboBox Crafting_Recipes_RecipeItem;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.TextBox Crafting_Recipes_RecipeItemName;
+        private System.Windows.Forms.Button Craftin_Recipes_AddRecipeItem;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TextBox Crafting_Recipes_RecipeItemAmount;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.TextBox Crafting_Recipes_RecipeItemCost;
+        private System.Windows.Forms.Button Crafting_Recipes_SaveRecipe;
+        private System.Windows.Forms.CheckedListBox Crafting_Profit_List;
+        private System.Windows.Forms.Button Crafting_Profit_Check;
+        private System.Windows.Forms.ListBox Crafting_Profit_Resources;
+        private System.Windows.Forms.Button Crafting_Profit_Calculate;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.TextBox Crafting_Recipes_LaborCost;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.TextBox Crafting_Recipes_Profit_LaborInMoney;
+        private System.Windows.Forms.TextBox Crafting_Profit_Profit;
+        private System.Windows.Forms.Label label34;
     }
 }
 

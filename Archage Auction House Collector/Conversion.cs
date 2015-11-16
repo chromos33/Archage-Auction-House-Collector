@@ -13,6 +13,11 @@ namespace Archage_Auction_House_Collector
             get;
             set;
         }
+        public int fixcost
+        {
+            get;
+            set;
+        }
         public string name
         {
             get;
@@ -42,6 +47,10 @@ namespace Archage_Auction_House_Collector
         {
             get;
             set;
+        }
+        public override string ToString()
+        {
+            return SourceItem + " -> " + ResultItem;
         }
     }
 }
