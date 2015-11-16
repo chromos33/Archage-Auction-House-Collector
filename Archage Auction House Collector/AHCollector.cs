@@ -914,21 +914,38 @@ namespace Archage_Auction_House_Collector
                 {
                     totalcost += item.vendorcost;
                 }
-                else
+                if(item.LaborCost>0)
                 {
-                    var loc = InventoryDB.GetCollection<InventoryItem>(item.Name);
-                    var inventoryItems = loc.FindAll();
-                    int inventoryPrice = 999999999;
-                    foreach(var inventoryitem in inventoryItems)
-                    {
-                        int tempprice = (inventoryitem.gold * 100 * 100 + inventoryitem.silver * 100 + inventoryitem.copper);
-                        if (inventoryPrice > tempprice)
-                        {
-                            inventoryPrice = tempprice;
-                        }
-                    }
-                    
+                    totallaborcost += item.LaborCost;
                 }
+                // Inventory I don't give a fuck about Laborcost
+                var loc = InventoryDB.GetCollection<InventoryItem>(item.Name);
+                var inventoryItems = loc.FindAll();
+                int inventoryPrice = 999999999;
+                foreach(var inventoryitem in inventoryItems)
+                {
+                    int tempprice = (inventoryitem.gold * 100 * 100 + inventoryitem.silver * 100 + inventoryitem.copper);
+                    if (inventoryPrice > tempprice)
+                    {
+                        inventoryPrice = tempprice;
+                    }
+                }
+                //Auction
+                var auctionloc = DB.GetCollection<AuctionItem>(item.Name);
+                var auctionItems = auctionloc.FindAll().Where(x => x.TimeStamp > ((int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 60 * 60 * 24));
+                int auctionprice = 999999999;
+                foreach (AuctionItem auctionitem in auctionItems)
+                {
+                    if(auctionitem.BuyoutPrice < auctionprice)
+                    {
+                        auctionprice = auctionitem.BuyoutPrice;
+                    }
+                }
+                //Auction+Crafting
+                RecipeItem temprecipeitem;
+                temprecipeitem = item;
+                // Build into object to calculate it's own price either through crafting / auction
+                
             }
         }
     }

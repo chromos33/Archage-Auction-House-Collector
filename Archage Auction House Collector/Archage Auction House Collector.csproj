@@ -118,6 +118,7 @@
     <Compile Include="AuctionItem.cs" />
     <Compile Include="Conversion.cs" />
     <Compile Include="InventoryItem.cs" />
+    <Compile Include="LaborPriceDataPoint.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecipeItem.cs" />
