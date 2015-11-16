@@ -89,7 +89,7 @@ namespace Archage_Auction_House_Collector
                 {
                     TotalCost += vendorcost;
                 }
-                var loc = InventoryDB.GetCollection<InventoryItem>(item.Name);
+                var loc = InventoryDB.GetCollection<InventoryItem>(Name);
                 var inventoryItems = loc.FindAll();
                 int inventoryPrice = 999999999;
                 foreach (var inventoryitem in inventoryItems)
