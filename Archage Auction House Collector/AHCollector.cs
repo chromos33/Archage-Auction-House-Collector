@@ -11,6 +11,7 @@ using System.Net;
 using LiteDB;
 using System.IO;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace Archage_Auction_House_Collector
 {
@@ -19,14 +20,31 @@ namespace Archage_Auction_House_Collector
         LiteDatabase DB;
         LiteDatabase InventoryDB;
         LiteDatabase ConversionDB;
-        LiteDatabase RecipeDB;
+        List<RecipeItem> RecipeItemsTop;
         string path;
         string inventoryPath;
         string conversionPath;
-        string recipeDBPath;
+        string RecipesPath;
         public Archage_AH_DataCollector()
         {
             InitializeComponent();
+            RecipesPath = @Directory.GetCurrentDirectory() + "\\Recipe.json";
+            if (File.Exists(RecipesPath))
+            {
+                string Recipes = System.IO.File.ReadAllText(RecipesPath);
+                RecipeItemsTop = JsonConvert.DeserializeObject<List<RecipeItem>>(Recipes);
+            }
+            else
+            {
+                RecipeItemsTop = new List<RecipeItem>();
+            }
+            
+
+            
+
+            
+
+            
             path = Directory.GetCurrentDirectory() + "\\ItemDB.db";
             DB = new LiteDatabase(@path);
             inventoryPath = Directory.GetCurrentDirectory() + "\\InventoryDB.db";
@@ -34,23 +52,11 @@ namespace Archage_Auction_House_Collector
 
             conversionPath = Directory.GetCurrentDirectory() + "\\ConversionDB.db";
             ConversionDB = new LiteDatabase(@conversionPath);
-
-            recipeDBPath = Directory.GetCurrentDirectory() + "\\RecipesDB.db";
-            RecipeDB = new LiteDatabase(@recipeDBPath);
+            
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             Duration.SelectedIndex = 0;
-
-            //Crafting_Recipes_Recipe
-            //Crafting_Recipes_RecipeItem
-            var col = RecipeDB.GetCollection<RecipeItem>("Recipe");
-            var Recipes = col.FindAll();
-            foreach(RecipeItem item in Recipes)
-            {
-                Crafting_Recipes_Recipe.Items.Add(item);
-                Crafting_Recipes_RecipeItem.Items.Add(item);
-            }
 
 
             IEnumerable<string> CollectionNames = DB.GetCollectionNames();
@@ -802,6 +808,7 @@ namespace Archage_Auction_House_Collector
         {
 
             string RecipeItemName = "";
+            RecipeItem subRecipeItem = null;
             string RecipeName = "";
             int Amount = 0;
             int Cost = 0;
@@ -836,13 +843,14 @@ namespace Archage_Auction_House_Collector
             if (Crafting_Recipes_RecipeItemName.Text != "")
             {
                 RecipeItemName = Crafting_Recipes_RecipeItemName.Text;
-                newSubitem = true;
             }
             else
             {
                 if(Crafting_Recipes_RecipeItem.SelectedItem != "")
                 {
                     RecipeItemName = Crafting_Recipes_RecipeItem.SelectedItem.ToString();
+                    subRecipeItem = (RecipeItem) Crafting_Recipes_RecipeItem.SelectedItem;
+                    newSubitem = true;
                 }
             }
             if(RecipeItemName == "")
@@ -864,6 +872,10 @@ namespace Archage_Auction_House_Collector
                 Item.Name = RecipeName.Replace(" ", "_");
                 Item.vendorcost = Cost;
                 Item.LaborCost = LaborCost;
+                if(subRecipeItem != null)
+                {
+                    Item.AddSubItem(subRecipeItem);
+                }
                 Crafting_Recipes_Recipe.Items.Add(Item);
                 Crafting_Recipes_RecipeItem.Items.Add(Item);
                 Crafting_Recipes_Recipe.SelectedItem = Item;
@@ -874,77 +886,41 @@ namespace Archage_Auction_House_Collector
                 Crafting_Recipes_RecipeItem.Items.Remove(Item);
 
                 RecipeItem Subitem = new RecipeItem();
-                if(newSubitem)
-                {
-                    Subitem.Amount = Amount;
-                    Subitem.Name = RecipeName.Replace(" ", "_");
-                    Subitem.vendorcost = Cost;
-                    Subitem.LaborCost = LaborCost;
-                }
-                else
-                {
-                    Subitem = (RecipeItem) Crafting_Recipes_RecipeItem.SelectedItem;
-                }
+                Subitem = (RecipeItem) Crafting_Recipes_RecipeItem.SelectedItem;
                 Item.AddSubItem(Subitem);
                 Crafting_Recipes_RecipeItem.Items.Add(Item);
             }
+            Crafting_Recipes_RecipeItemName.Text = "";
         }
 
         private void Crafting_Recipes_SaveRecipe_Click(object sender, EventArgs e)
         {
             foreach (RecipeItem item in Crafting_Recipes_Recipe.Items)
             {
-                if(!item.saved)
+                if(!RecipeItemsTop.Contains(item))
                 {
-                    var col = RecipeDB.GetCollection<RecipeItem>("Recipe");
-                    col.Insert(item);
+                    RecipeItemsTop.Add(item);
                 }
+            }
+            string jsonobject = JsonConvert.SerializeObject(RecipeItemsTop);
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(RecipesPath))
+            {
+                file.WriteLine(jsonobject);
             }
         }
 
         private void Crafting_Profit_Check_Click(object sender, EventArgs e)
         {
-            var col = RecipeDB.GetCollection<RecipeItem>("Recipe");
-            var Recipes = col.FindAll();
-            foreach (RecipeItem item in Recipes)
+            int laborcost = 0;
+            if (!Int32.TryParse(Crafting_Recipes_Profit_LaborInMoney.Text, out laborcost))
             {
-                int totalcost = 0;
-                int totallaborcost = 0;
-                if(item.vendorcost > 0)
-                {
-                    totalcost += item.vendorcost;
-                }
-                if(item.LaborCost>0)
-                {
-                    totallaborcost += item.LaborCost;
-                }
-                // Inventory I don't give a fuck about Laborcost
-                var loc = InventoryDB.GetCollection<InventoryItem>(item.Name);
-                var inventoryItems = loc.FindAll();
-                int inventoryPrice = 999999999;
-                foreach(var inventoryitem in inventoryItems)
-                {
-                    int tempprice = (inventoryitem.gold * 100 * 100 + inventoryitem.silver * 100 + inventoryitem.copper);
-                    if (inventoryPrice > tempprice)
-                    {
-                        inventoryPrice = tempprice;
-                    }
-                }
-                //Auction
-                var auctionloc = DB.GetCollection<AuctionItem>(item.Name);
-                var auctionItems = auctionloc.FindAll().Where(x => x.TimeStamp > ((int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 60 * 60 * 24));
-                int auctionprice = 999999999;
-                foreach (AuctionItem auctionitem in auctionItems)
-                {
-                    if(auctionitem.BuyoutPrice < auctionprice)
-                    {
-                        auctionprice = auctionitem.BuyoutPrice;
-                    }
-                }
-                //Auction+Crafting
-                RecipeItem temprecipeitem;
-                temprecipeitem = item;
-                // Build into object to calculate it's own price either through crafting / auction
+                MessageBox.Show("WorkersPotion must be a number and at least 0");
+                return;
+            }
+            foreach (RecipeItem item in RecipeItemsTop)
+            {
+                RecipeItem tempitem = item.CheapestWayObtaining(DB,InventoryDB,laborcost/1000);
+                Debug.WriteLine("test");
                 
             }
         }

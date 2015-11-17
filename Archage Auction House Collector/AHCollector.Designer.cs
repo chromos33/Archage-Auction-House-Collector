@@ -126,33 +126,33 @@ namespace Archage_Auction_House_Collector
             this.Conversion_Correction_ItemSelect = new System.Windows.Forms.ComboBox();
             this.Conversion_Correction_BaseItemCount = new System.Windows.Forms.TextBox();
             this.Conversion_Correction_Source_ItemCount = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.label28 = new System.Windows.Forms.Label();
-            this.Crafting_Recipes_Recipe = new System.Windows.Forms.ComboBox();
-            this.Crafting_Recipes_RecipeName = new System.Windows.Forms.TextBox();
-            this.Crafting_Recipes_RecipeItem = new System.Windows.Forms.ComboBox();
-            this.label29 = new System.Windows.Forms.Label();
-            this.Crafting_Recipes_RecipeItemAmount = new System.Windows.Forms.TextBox();
-            this.label30 = new System.Windows.Forms.Label();
-            this.Craftin_Recipes_AddRecipeItem = new System.Windows.Forms.Button();
-            this.Crafting_Recipes_RecipeItemName = new System.Windows.Forms.TextBox();
-            this.label31 = new System.Windows.Forms.Label();
-            this.Crafting_Recipes_RecipeItemCost = new System.Windows.Forms.TextBox();
-            this.Crafting_Recipes_SaveRecipe = new System.Windows.Forms.Button();
-            this.Crafting_Profit_List = new System.Windows.Forms.CheckedListBox();
-            this.Crafting_Profit_Check = new System.Windows.Forms.Button();
-            this.Crafting_Profit_Calculate = new System.Windows.Forms.Button();
-            this.Crafting_Profit_Resources = new System.Windows.Forms.ListBox();
             this.label32 = new System.Windows.Forms.Label();
             this.Crafting_Recipes_LaborCost = new System.Windows.Forms.TextBox();
-            this.label33 = new System.Windows.Forms.Label();
-            this.Crafting_Recipes_Profit_LaborInMoney = new System.Windows.Forms.TextBox();
+            this.Crafting_Recipes_SaveRecipe = new System.Windows.Forms.Button();
+            this.label31 = new System.Windows.Forms.Label();
+            this.Crafting_Recipes_RecipeItemCost = new System.Windows.Forms.TextBox();
+            this.Crafting_Recipes_RecipeItemName = new System.Windows.Forms.TextBox();
+            this.Craftin_Recipes_AddRecipeItem = new System.Windows.Forms.Button();
+            this.label30 = new System.Windows.Forms.Label();
+            this.Crafting_Recipes_RecipeItemAmount = new System.Windows.Forms.TextBox();
+            this.Crafting_Recipes_RecipeItem = new System.Windows.Forms.ComboBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.Crafting_Recipes_RecipeName = new System.Windows.Forms.TextBox();
+            this.Crafting_Recipes_Recipe = new System.Windows.Forms.ComboBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
             this.Crafting_Profit_Profit = new System.Windows.Forms.TextBox();
             this.label34 = new System.Windows.Forms.Label();
+            this.Crafting_Recipes_Profit_LaborInMoney = new System.Windows.Forms.TextBox();
+            this.label33 = new System.Windows.Forms.Label();
+            this.Crafting_Profit_Resources = new System.Windows.Forms.ListBox();
+            this.Crafting_Profit_Calculate = new System.Windows.Forms.Button();
+            this.Crafting_Profit_Check = new System.Windows.Forms.Button();
+            this.Crafting_Profit_List = new System.Windows.Forms.CheckedListBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.Tabs.SuspendLayout();
             this.DataEntry.SuspendLayout();
             this.DataExploration.SuspendLayout();
@@ -1155,6 +1155,127 @@ namespace Archage_Auction_House_Collector
             this.tabPage6.Text = "Recipes";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(449, 67);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(55, 13);
+            this.label32.TabIndex = 19;
+            this.label32.Text = "LaborCost";
+            // 
+            // Crafting_Recipes_LaborCost
+            // 
+            this.Crafting_Recipes_LaborCost.Location = new System.Drawing.Point(452, 84);
+            this.Crafting_Recipes_LaborCost.Name = "Crafting_Recipes_LaborCost";
+            this.Crafting_Recipes_LaborCost.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_LaborCost.TabIndex = 7;
+            // 
+            // Crafting_Recipes_SaveRecipe
+            // 
+            this.Crafting_Recipes_SaveRecipe.Location = new System.Drawing.Point(9, 209);
+            this.Crafting_Recipes_SaveRecipe.Name = "Crafting_Recipes_SaveRecipe";
+            this.Crafting_Recipes_SaveRecipe.Size = new System.Drawing.Size(98, 23);
+            this.Crafting_Recipes_SaveRecipe.TabIndex = 9;
+            this.Crafting_Recipes_SaveRecipe.Text = "Save Recipe";
+            this.Crafting_Recipes_SaveRecipe.UseVisualStyleBackColor = true;
+            this.Crafting_Recipes_SaveRecipe.Click += new System.EventHandler(this.Crafting_Recipes_SaveRecipe_Click);
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(449, 27);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(28, 13);
+            this.label31.TabIndex = 16;
+            this.label31.Text = "Cost";
+            // 
+            // Crafting_Recipes_RecipeItemCost
+            // 
+            this.Crafting_Recipes_RecipeItemCost.Location = new System.Drawing.Point(452, 44);
+            this.Crafting_Recipes_RecipeItemCost.Name = "Crafting_Recipes_RecipeItemCost";
+            this.Crafting_Recipes_RecipeItemCost.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_RecipeItemCost.TabIndex = 6;
+            // 
+            // Crafting_Recipes_RecipeItemName
+            // 
+            this.Crafting_Recipes_RecipeItemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.Crafting_Recipes_RecipeItemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.Crafting_Recipes_RecipeItemName.Location = new System.Drawing.Point(187, 58);
+            this.Crafting_Recipes_RecipeItemName.Name = "Crafting_Recipes_RecipeItemName";
+            this.Crafting_Recipes_RecipeItemName.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_RecipeItemName.TabIndex = 4;
+            // 
+            // Craftin_Recipes_AddRecipeItem
+            // 
+            this.Craftin_Recipes_AddRecipeItem.Location = new System.Drawing.Point(463, 125);
+            this.Craftin_Recipes_AddRecipeItem.Name = "Craftin_Recipes_AddRecipeItem";
+            this.Craftin_Recipes_AddRecipeItem.Size = new System.Drawing.Size(98, 23);
+            this.Craftin_Recipes_AddRecipeItem.TabIndex = 8;
+            this.Craftin_Recipes_AddRecipeItem.Text = "Add RecipeItem";
+            this.Craftin_Recipes_AddRecipeItem.UseVisualStyleBackColor = true;
+            this.Craftin_Recipes_AddRecipeItem.Click += new System.EventHandler(this.Craftin_Recipes_AddRecipeItem_Click);
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(324, 27);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(43, 13);
+            this.label30.TabIndex = 6;
+            this.label30.Text = "Amount";
+            // 
+            // Crafting_Recipes_RecipeItemAmount
+            // 
+            this.Crafting_Recipes_RecipeItemAmount.Location = new System.Drawing.Point(327, 44);
+            this.Crafting_Recipes_RecipeItemAmount.Name = "Crafting_Recipes_RecipeItemAmount";
+            this.Crafting_Recipes_RecipeItemAmount.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_RecipeItemAmount.TabIndex = 5;
+            // 
+            // Crafting_Recipes_RecipeItem
+            // 
+            this.Crafting_Recipes_RecipeItem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.Crafting_Recipes_RecipeItem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.Crafting_Recipes_RecipeItem.FormattingEnabled = true;
+            this.Crafting_Recipes_RecipeItem.Location = new System.Drawing.Point(187, 27);
+            this.Crafting_Recipes_RecipeItem.Name = "Crafting_Recipes_RecipeItem";
+            this.Crafting_Recipes_RecipeItem.Size = new System.Drawing.Size(121, 21);
+            this.Crafting_Recipes_RecipeItem.TabIndex = 3;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(184, 11);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(64, 13);
+            this.label29.TabIndex = 3;
+            this.label29.Text = "Recipe Item";
+            this.label29.Click += new System.EventHandler(this.label29_Click);
+            // 
+            // Crafting_Recipes_RecipeName
+            // 
+            this.Crafting_Recipes_RecipeName.Location = new System.Drawing.Point(9, 54);
+            this.Crafting_Recipes_RecipeName.Name = "Crafting_Recipes_RecipeName";
+            this.Crafting_Recipes_RecipeName.Size = new System.Drawing.Size(121, 20);
+            this.Crafting_Recipes_RecipeName.TabIndex = 2;
+            // 
+            // Crafting_Recipes_Recipe
+            // 
+            this.Crafting_Recipes_Recipe.FormattingEnabled = true;
+            this.Crafting_Recipes_Recipe.Location = new System.Drawing.Point(9, 27);
+            this.Crafting_Recipes_Recipe.Name = "Crafting_Recipes_Recipe";
+            this.Crafting_Recipes_Recipe.Size = new System.Drawing.Size(121, 21);
+            this.Crafting_Recipes_Recipe.TabIndex = 1;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(6, 11);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(41, 13);
+            this.label28.TabIndex = 0;
+            this.label28.Text = "Recipe";
+            // 
             // tabPage7
             // 
             this.tabPage7.Controls.Add(this.Crafting_Profit_Profit);
@@ -1173,179 +1294,6 @@ namespace Archage_Auction_House_Collector
             this.tabPage7.Text = "Profit";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(6, 11);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(41, 13);
-            this.label28.TabIndex = 0;
-            this.label28.Text = "Recipe";
-            // 
-            // Crafting_Recipes_Recipe
-            // 
-            this.Crafting_Recipes_Recipe.FormattingEnabled = true;
-            this.Crafting_Recipes_Recipe.Location = new System.Drawing.Point(9, 27);
-            this.Crafting_Recipes_Recipe.Name = "Crafting_Recipes_Recipe";
-            this.Crafting_Recipes_Recipe.Size = new System.Drawing.Size(121, 21);
-            this.Crafting_Recipes_Recipe.TabIndex = 1;
-            // 
-            // Crafting_Recipes_RecipeName
-            // 
-            this.Crafting_Recipes_RecipeName.Location = new System.Drawing.Point(9, 54);
-            this.Crafting_Recipes_RecipeName.Name = "Crafting_Recipes_RecipeName";
-            this.Crafting_Recipes_RecipeName.Size = new System.Drawing.Size(121, 20);
-            this.Crafting_Recipes_RecipeName.TabIndex = 2;
-            // 
-            // Crafting_Recipes_RecipeItem
-            // 
-            this.Crafting_Recipes_RecipeItem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.Crafting_Recipes_RecipeItem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.Crafting_Recipes_RecipeItem.FormattingEnabled = true;
-            this.Crafting_Recipes_RecipeItem.Location = new System.Drawing.Point(187, 27);
-            this.Crafting_Recipes_RecipeItem.Name = "Crafting_Recipes_RecipeItem";
-            this.Crafting_Recipes_RecipeItem.Size = new System.Drawing.Size(121, 21);
-            this.Crafting_Recipes_RecipeItem.TabIndex = 4;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(184, 11);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(64, 13);
-            this.label29.TabIndex = 3;
-            this.label29.Text = "Recipe Item";
-            this.label29.Click += new System.EventHandler(this.label29_Click);
-            // 
-            // Crafting_Recipes_RecipeItemAmount
-            // 
-            this.Crafting_Recipes_RecipeItemAmount.Location = new System.Drawing.Point(327, 44);
-            this.Crafting_Recipes_RecipeItemAmount.Name = "Crafting_Recipes_RecipeItemAmount";
-            this.Crafting_Recipes_RecipeItemAmount.Size = new System.Drawing.Size(121, 20);
-            this.Crafting_Recipes_RecipeItemAmount.TabIndex = 5;
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(324, 27);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(43, 13);
-            this.label30.TabIndex = 6;
-            this.label30.Text = "Amount";
-            // 
-            // Craftin_Recipes_AddRecipeItem
-            // 
-            this.Craftin_Recipes_AddRecipeItem.Location = new System.Drawing.Point(463, 125);
-            this.Craftin_Recipes_AddRecipeItem.Name = "Craftin_Recipes_AddRecipeItem";
-            this.Craftin_Recipes_AddRecipeItem.Size = new System.Drawing.Size(98, 23);
-            this.Craftin_Recipes_AddRecipeItem.TabIndex = 7;
-            this.Craftin_Recipes_AddRecipeItem.Text = "Add RecipeItem";
-            this.Craftin_Recipes_AddRecipeItem.UseVisualStyleBackColor = true;
-            this.Craftin_Recipes_AddRecipeItem.Click += new System.EventHandler(this.Craftin_Recipes_AddRecipeItem_Click);
-            // 
-            // Crafting_Recipes_RecipeItemName
-            // 
-            this.Crafting_Recipes_RecipeItemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.Crafting_Recipes_RecipeItemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.Crafting_Recipes_RecipeItemName.Location = new System.Drawing.Point(187, 58);
-            this.Crafting_Recipes_RecipeItemName.Name = "Crafting_Recipes_RecipeItemName";
-            this.Crafting_Recipes_RecipeItemName.Size = new System.Drawing.Size(121, 20);
-            this.Crafting_Recipes_RecipeItemName.TabIndex = 8;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(449, 27);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(28, 13);
-            this.label31.TabIndex = 16;
-            this.label31.Text = "Cost";
-            // 
-            // Crafting_Recipes_RecipeItemCost
-            // 
-            this.Crafting_Recipes_RecipeItemCost.Location = new System.Drawing.Point(452, 44);
-            this.Crafting_Recipes_RecipeItemCost.Name = "Crafting_Recipes_RecipeItemCost";
-            this.Crafting_Recipes_RecipeItemCost.Size = new System.Drawing.Size(121, 20);
-            this.Crafting_Recipes_RecipeItemCost.TabIndex = 15;
-            // 
-            // Crafting_Recipes_SaveRecipe
-            // 
-            this.Crafting_Recipes_SaveRecipe.Location = new System.Drawing.Point(9, 209);
-            this.Crafting_Recipes_SaveRecipe.Name = "Crafting_Recipes_SaveRecipe";
-            this.Crafting_Recipes_SaveRecipe.Size = new System.Drawing.Size(98, 23);
-            this.Crafting_Recipes_SaveRecipe.TabIndex = 17;
-            this.Crafting_Recipes_SaveRecipe.Text = "Save Recipe";
-            this.Crafting_Recipes_SaveRecipe.UseVisualStyleBackColor = true;
-            this.Crafting_Recipes_SaveRecipe.Click += new System.EventHandler(this.Crafting_Recipes_SaveRecipe_Click);
-            // 
-            // Crafting_Profit_List
-            // 
-            this.Crafting_Profit_List.FormattingEnabled = true;
-            this.Crafting_Profit_List.Location = new System.Drawing.Point(2, 36);
-            this.Crafting_Profit_List.Name = "Crafting_Profit_List";
-            this.Crafting_Profit_List.Size = new System.Drawing.Size(324, 214);
-            this.Crafting_Profit_List.TabIndex = 0;
-            // 
-            // Crafting_Profit_Check
-            // 
-            this.Crafting_Profit_Check.Location = new System.Drawing.Point(341, 223);
-            this.Crafting_Profit_Check.Name = "Crafting_Profit_Check";
-            this.Crafting_Profit_Check.Size = new System.Drawing.Size(85, 23);
-            this.Crafting_Profit_Check.TabIndex = 4;
-            this.Crafting_Profit_Check.Text = "Check";
-            this.Crafting_Profit_Check.UseVisualStyleBackColor = true;
-            this.Crafting_Profit_Check.Click += new System.EventHandler(this.Crafting_Profit_Check_Click);
-            // 
-            // Crafting_Profit_Calculate
-            // 
-            this.Crafting_Profit_Calculate.Location = new System.Drawing.Point(511, 223);
-            this.Crafting_Profit_Calculate.Name = "Crafting_Profit_Calculate";
-            this.Crafting_Profit_Calculate.Size = new System.Drawing.Size(75, 23);
-            this.Crafting_Profit_Calculate.TabIndex = 5;
-            this.Crafting_Profit_Calculate.Text = "Calculate Resources";
-            this.Crafting_Profit_Calculate.UseVisualStyleBackColor = true;
-            // 
-            // Crafting_Profit_Resources
-            // 
-            this.Crafting_Profit_Resources.FormattingEnabled = true;
-            this.Crafting_Profit_Resources.Location = new System.Drawing.Point(341, 6);
-            this.Crafting_Profit_Resources.Name = "Crafting_Profit_Resources";
-            this.Crafting_Profit_Resources.Size = new System.Drawing.Size(245, 212);
-            this.Crafting_Profit_Resources.TabIndex = 6;
-            // 
-            // label32
-            // 
-            this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(449, 67);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(55, 13);
-            this.label32.TabIndex = 19;
-            this.label32.Text = "LaborCost";
-            // 
-            // Crafting_Recipes_LaborCost
-            // 
-            this.Crafting_Recipes_LaborCost.Location = new System.Drawing.Point(452, 84);
-            this.Crafting_Recipes_LaborCost.Name = "Crafting_Recipes_LaborCost";
-            this.Crafting_Recipes_LaborCost.Size = new System.Drawing.Size(121, 20);
-            this.Crafting_Recipes_LaborCost.TabIndex = 18;
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.label33.Location = new System.Drawing.Point(3, 10);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(91, 12);
-            this.label33.TabIndex = 5;
-            this.label33.Text = "Workers Potion Price";
-            // 
-            // Crafting_Recipes_Profit_LaborInMoney
-            // 
-            this.Crafting_Recipes_Profit_LaborInMoney.Location = new System.Drawing.Point(100, 6);
-            this.Crafting_Recipes_Profit_LaborInMoney.Name = "Crafting_Recipes_Profit_LaborInMoney";
-            this.Crafting_Recipes_Profit_LaborInMoney.Size = new System.Drawing.Size(100, 20);
-            this.Crafting_Recipes_Profit_LaborInMoney.TabIndex = 8;
-            // 
             // Crafting_Profit_Profit
             // 
             this.Crafting_Profit_Profit.Location = new System.Drawing.Point(248, 10);
@@ -1362,6 +1310,58 @@ namespace Archage_Auction_House_Collector
             this.label34.Size = new System.Drawing.Size(37, 12);
             this.label34.TabIndex = 9;
             this.label34.Text = "Profit %";
+            // 
+            // Crafting_Recipes_Profit_LaborInMoney
+            // 
+            this.Crafting_Recipes_Profit_LaborInMoney.Location = new System.Drawing.Point(100, 6);
+            this.Crafting_Recipes_Profit_LaborInMoney.Name = "Crafting_Recipes_Profit_LaborInMoney";
+            this.Crafting_Recipes_Profit_LaborInMoney.Size = new System.Drawing.Size(100, 20);
+            this.Crafting_Recipes_Profit_LaborInMoney.TabIndex = 8;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.label33.Location = new System.Drawing.Point(3, 10);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(91, 12);
+            this.label33.TabIndex = 5;
+            this.label33.Text = "Workers Potion Price";
+            // 
+            // Crafting_Profit_Resources
+            // 
+            this.Crafting_Profit_Resources.FormattingEnabled = true;
+            this.Crafting_Profit_Resources.Location = new System.Drawing.Point(341, 6);
+            this.Crafting_Profit_Resources.Name = "Crafting_Profit_Resources";
+            this.Crafting_Profit_Resources.Size = new System.Drawing.Size(245, 212);
+            this.Crafting_Profit_Resources.TabIndex = 6;
+            // 
+            // Crafting_Profit_Calculate
+            // 
+            this.Crafting_Profit_Calculate.Location = new System.Drawing.Point(511, 223);
+            this.Crafting_Profit_Calculate.Name = "Crafting_Profit_Calculate";
+            this.Crafting_Profit_Calculate.Size = new System.Drawing.Size(75, 23);
+            this.Crafting_Profit_Calculate.TabIndex = 5;
+            this.Crafting_Profit_Calculate.Text = "Calculate Resources";
+            this.Crafting_Profit_Calculate.UseVisualStyleBackColor = true;
+            // 
+            // Crafting_Profit_Check
+            // 
+            this.Crafting_Profit_Check.Location = new System.Drawing.Point(341, 223);
+            this.Crafting_Profit_Check.Name = "Crafting_Profit_Check";
+            this.Crafting_Profit_Check.Size = new System.Drawing.Size(85, 23);
+            this.Crafting_Profit_Check.TabIndex = 4;
+            this.Crafting_Profit_Check.Text = "Check";
+            this.Crafting_Profit_Check.UseVisualStyleBackColor = true;
+            this.Crafting_Profit_Check.Click += new System.EventHandler(this.Crafting_Profit_Check_Click);
+            // 
+            // Crafting_Profit_List
+            // 
+            this.Crafting_Profit_List.FormattingEnabled = true;
+            this.Crafting_Profit_List.Location = new System.Drawing.Point(2, 36);
+            this.Crafting_Profit_List.Name = "Crafting_Profit_List";
+            this.Crafting_Profit_List.Size = new System.Drawing.Size(324, 214);
+            this.Crafting_Profit_List.TabIndex = 0;
             // 
             // Archage_AH_DataCollector
             // 

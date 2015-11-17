@@ -10,16 +10,8 @@ namespace Archage_Auction_House_Collector
 {
     public class RecipeItem
     {
-        LiteDatabase DB;
-        LiteDatabase InventoryDB;
-        string path;
-        string inventoryPath;
         public RecipeItem()
         {
-            path = Directory.GetCurrentDirectory() + "\\ItemDB.db";
-            DB = new LiteDatabase(@path);
-            inventoryPath = Directory.GetCurrentDirectory() + "\\InventoryDB.db";
-            InventoryDB = new LiteDatabase(@inventoryPath);
             SubItems = new List<RecipeItem>();
             saved = false;
         }
@@ -29,6 +21,11 @@ namespace Archage_Auction_House_Collector
             set;
         }
         public string Name
+        {
+            get;
+            set;
+        }
+        public int Cost
         {
             get;
             set;
@@ -79,8 +76,9 @@ namespace Archage_Auction_House_Collector
             get;
             set;
         }
-        public LaborPriceDataPoint TotalPrice()
+        public RecipeItem CheapestWayObtaining(LiteDatabase DB, LiteDatabase InventoryDB,int _laborcost)
         {
+            RecipeItem upwarditem = new RecipeItem();
             int TotalCost = 0;
             int TotalLabor = 0;
             if(isBaseItem())
@@ -118,16 +116,77 @@ namespace Archage_Auction_House_Collector
                 {
                     TotalCost += inventoryPrice;
                 }
+                upwarditem.Cost = TotalCost;
+                upwarditem.Amount = Amount;
+                upwarditem.LaborCost = 0;
+                upwarditem.saved = false;
+                upwarditem.vendorcost = 0;
+                upwarditem.Name = Name;
             }
             else
             {
-                //do the same as aboth only difference is you also call subitems TotalPrice() Function
-                // Factor in LaborCost in Crafting Price
+                foreach(RecipeItem subitem in SubItems)
+                {
+                    int InventoryPrice = 0;
+                    int AuctionPrice = 0;
+                    int CraftingPrice = 0;
+                    var inventory = InventoryDB.GetCollection<InventoryItem>(subitem.Name);
+                    var inventoryItems = inventory.FindAll();
+                    foreach(InventoryItem inventoryItem in inventoryItems)
+                    {
+                        InventoryPrice = inventoryItem.amount * inventoryItem.priceincopper();
+                    }
+                    var auction = DB.GetCollection<AuctionItem>(subitem.Name);
+                    var auctionItems = auction.FindAll().Where(x => x.TimeStamp > ((int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 60 * 60 * 24));
+                    AuctionPrice = 999999999;
+                    foreach(AuctionItem _auctionItem in auctionItems)
+                    {
+                        if(_auctionItem.BuyoutPrice < AuctionPrice)
+                        {
+                            AuctionPrice = _auctionItem.BuyoutPrice;
+                        }
+                    }
+                    CraftingPrice = subitem.CheapestWayObtaining(DB, InventoryDB, _laborcost).Cost;
+                    int _Price = 0;
+                    int[] Price = new int[3] { InventoryPrice, AuctionPrice, CraftingPrice };
+                    _Price = Price.Min();
+                    if(_Price == InventoryPrice)
+                    {
+                        RecipeItem newitem = new RecipeItem();
+                        newitem.Name = subitem.Name;
+                        newitem.Cost = _Price*subitem.Amount;
+                        newitem.Amount = subitem.Amount;
+                        newitem.LaborCost = 0;
+                        newitem.saved = false;
+                        newitem.vendorcost = 0;
+                        upwarditem.AddSubItem(newitem);
+                    }
+                    if (_Price == AuctionPrice)
+                    {
+                        RecipeItem newitem = new RecipeItem();
+                        newitem.Name = subitem.Name;
+                        newitem.Cost = _Price * subitem.Amount;
+                        newitem.Amount = subitem.Amount;
+                        newitem.LaborCost = 0;
+                        newitem.saved = false;
+                        newitem.vendorcost = 0;
+                        upwarditem.AddSubItem(newitem);
+                    }
+                    if (_Price == CraftingPrice)
+                    {
+                        RecipeItem newitem = new RecipeItem();
+                        newitem.Name = subitem.Name;
+                        newitem.Cost = _Price * subitem.Amount;
+                        newitem.Amount = subitem.Amount;
+                        newitem.LaborCost = 0;
+                        newitem.saved = false;
+                        newitem.vendorcost = 0;
+                        newitem.AddSubItem(subitem.CheapestWayObtaining(DB, InventoryDB, _laborcost));
+                        upwarditem.AddSubItem(newitem);
+                    }
+                }
             }
-            LaborPriceDataPoint laborpricepoint = new LaborPriceDataPoint();
-            laborpricepoint.Cost = TotalCost;
-            laborpricepoint.Labor = TotalLabor;
-            return laborpricepoint;
+            return upwarditem;
         }
     }
 }
