@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LiteDB;
 using System.IO;
 
 namespace Archage_Auction_House_Collector
@@ -60,6 +59,16 @@ namespace Archage_Auction_House_Collector
         }
         public bool isBaseItem()
         {
+            if(SubItems.Count() != 0)
+            {
+                foreach(RecipeItem item in SubItems)
+                {
+                    if (item.Name == Name)
+                    {
+                        return true;
+                    }
+                }
+            }
             if(SubItems.Count() == 0)
             {
                 return true;
@@ -76,7 +85,7 @@ namespace Archage_Auction_House_Collector
             get;
             set;
         }
-        public RecipeItem CheapestWayObtaining(LiteDatabase DB, LiteDatabase InventoryDB,int _laborcost)
+        public RecipeItem CheapestWayObtaining(List<AuctionItem> DB, List<InventoryItem> InventoryDB,int _laborcost,ref Dictionary<string,int> Materials,ref int _totalprice)
         {
             RecipeItem upwarditem = new RecipeItem();
             int TotalCost = 0;
@@ -87,8 +96,7 @@ namespace Archage_Auction_House_Collector
                 {
                     TotalCost += vendorcost;
                 }
-                var loc = InventoryDB.GetCollection<InventoryItem>(Name);
-                var inventoryItems = loc.FindAll();
+                var inventoryItems = InventoryDB.Where(x => x.itemname == Name);
                 int inventoryPrice = 999999999;
                 foreach (var inventoryitem in inventoryItems)
                 {
@@ -98,8 +106,7 @@ namespace Archage_Auction_House_Collector
                         inventoryPrice = tempprice;
                     }
                 }
-                var auctionloc = DB.GetCollection<AuctionItem>(Name);
-                var auctionItems = auctionloc.FindAll().Where(x => x.TimeStamp > ((int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 60 * 60 * 24));
+                var auctionItems = DB.Where(x => x.TimeStamp > ((int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 60 * 60 * 24));
                 int auctionprice = 999999999;
                 foreach (AuctionItem auctionitem in auctionItems)
                 {
@@ -110,14 +117,23 @@ namespace Archage_Auction_House_Collector
                 }
                 if(auctionprice<inventoryPrice)
                 {
-                    TotalCost += auctionprice;
+                    TotalCost += auctionprice*Amount;
                 }
                 else
                 {
-                    TotalCost += inventoryPrice;
+                    TotalCost += inventoryPrice*Amount;
                 }
+                _totalprice += TotalCost;
                 upwarditem.Cost = TotalCost;
                 upwarditem.Amount = Amount;
+                if (Materials.Keys.Contains(Name))
+                {
+                    Materials[Name] += Amount;
+                }
+                else
+                {
+                    Materials[Name] = Amount;
+                }
                 upwarditem.LaborCost = 0;
                 upwarditem.saved = false;
                 upwarditem.vendorcost = 0;
@@ -130,14 +146,12 @@ namespace Archage_Auction_House_Collector
                     int InventoryPrice = 0;
                     int AuctionPrice = 0;
                     int CraftingPrice = 0;
-                    var inventory = InventoryDB.GetCollection<InventoryItem>(subitem.Name);
-                    var inventoryItems = inventory.FindAll();
+                    var inventoryItems = InventoryDB.Where(x => x.itemname == subitem.Name);
                     foreach(InventoryItem inventoryItem in inventoryItems)
                     {
                         InventoryPrice = inventoryItem.amount * inventoryItem.priceincopper();
                     }
-                    var auction = DB.GetCollection<AuctionItem>(subitem.Name);
-                    var auctionItems = auction.FindAll().Where(x => x.TimeStamp > ((int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 60 * 60 * 24));
+                    var auctionItems = DB.Where(x => x.itemName == subitem.Name).Where(x => x.TimeStamp > ((int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 60 * 60 * 24));
                     AuctionPrice = 999999999;
                     foreach(AuctionItem _auctionItem in auctionItems)
                     {
@@ -146,7 +160,7 @@ namespace Archage_Auction_House_Collector
                             AuctionPrice = _auctionItem.BuyoutPrice;
                         }
                     }
-                    CraftingPrice = subitem.CheapestWayObtaining(DB, InventoryDB, _laborcost).Cost;
+                    CraftingPrice = subitem.CheapestWayObtaining(DB, InventoryDB, _laborcost, ref Materials, ref _totalprice).Cost;
                     int _Price = 0;
                     int[] Price = new int[3] { InventoryPrice, AuctionPrice, CraftingPrice };
                     _Price = Price.Min();
@@ -155,7 +169,16 @@ namespace Archage_Auction_House_Collector
                         RecipeItem newitem = new RecipeItem();
                         newitem.Name = subitem.Name;
                         newitem.Cost = _Price*subitem.Amount;
+                        _totalprice += _Price * subitem.Amount;
                         newitem.Amount = subitem.Amount;
+                        if (Materials.Keys.Contains(Name))
+                        {
+                            Materials[Name] += Amount;
+                        }
+                        else
+                        {
+                            Materials[Name] = Amount;
+                        }
                         newitem.LaborCost = 0;
                         newitem.saved = false;
                         newitem.vendorcost = 0;
@@ -166,7 +189,16 @@ namespace Archage_Auction_House_Collector
                         RecipeItem newitem = new RecipeItem();
                         newitem.Name = subitem.Name;
                         newitem.Cost = _Price * subitem.Amount;
+                        _totalprice += _Price * subitem.Amount;
                         newitem.Amount = subitem.Amount;
+                        if (Materials.Keys.Contains(Name))
+                        {
+                            Materials[Name] += Amount;
+                        }
+                        else
+                        {
+                            Materials[Name] = Amount;
+                        }
                         newitem.LaborCost = 0;
                         newitem.saved = false;
                         newitem.vendorcost = 0;
@@ -181,7 +213,7 @@ namespace Archage_Auction_House_Collector
                         newitem.LaborCost = 0;
                         newitem.saved = false;
                         newitem.vendorcost = 0;
-                        newitem.AddSubItem(subitem.CheapestWayObtaining(DB, InventoryDB, _laborcost));
+                        newitem.AddSubItem(subitem.CheapestWayObtaining(DB, InventoryDB, _laborcost, ref Materials, ref _totalprice));
                         upwarditem.AddSubItem(newitem);
                     }
                 }

@@ -8,10 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
-using LiteDB;
 using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using LiteDB;
 
 namespace Archage_Auction_House_Collector
 {
@@ -20,31 +20,24 @@ namespace Archage_Auction_House_Collector
         LiteDatabase DB;
         LiteDatabase InventoryDB;
         LiteDatabase ConversionDB;
+
+
         List<RecipeItem> RecipeItemsTop;
+        List<AuctionItem> AuctionItemsTop;
+        List<InventoryItem> InventoryItemsTop;
+        List<Conversion> ConversionItemsTop;
         string path;
+            
         string inventoryPath;
         string conversionPath;
         string RecipesPath;
+        string AuctionPath;
+        string InventoryPath;
+        string ConversionPath;
         public Archage_AH_DataCollector()
         {
             InitializeComponent();
-            RecipesPath = @Directory.GetCurrentDirectory() + "\\Recipe.json";
-            if (File.Exists(RecipesPath))
-            {
-                string Recipes = System.IO.File.ReadAllText(RecipesPath);
-                RecipeItemsTop = JsonConvert.DeserializeObject<List<RecipeItem>>(Recipes);
-            }
-            else
-            {
-                RecipeItemsTop = new List<RecipeItem>();
-            }
-            
 
-            
-
-            
-
-            
             path = Directory.GetCurrentDirectory() + "\\ItemDB.db";
             DB = new LiteDatabase(@path);
             inventoryPath = Directory.GetCurrentDirectory() + "\\InventoryDB.db";
@@ -52,15 +45,75 @@ namespace Archage_Auction_House_Collector
 
             conversionPath = Directory.GetCurrentDirectory() + "\\ConversionDB.db";
             ConversionDB = new LiteDatabase(@conversionPath);
+
+
+
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+            RecipesPath = @Directory.GetCurrentDirectory() + "\\Recipe.json";
+            if (File.Exists(RecipesPath))
+            {
+                string Recipes = System.IO.File.ReadAllText(RecipesPath);
+                RecipeItemsTop = new List<RecipeItem>();
+                RecipeItemsTop = JsonConvert.DeserializeObject<List<RecipeItem>>(Recipes);
+            }
+            else
+            {
+                RecipeItemsTop = new List<RecipeItem>();
+            }
+            AuctionPath = @Directory.GetCurrentDirectory() + "\\AuctionData.json";
+            if (File.Exists(AuctionPath))
+            {
+                string Auctions = System.IO.File.ReadAllText(AuctionPath);
+                AuctionItemsTop = JsonConvert.DeserializeObject<List<AuctionItem>>(Auctions);
+            }
+            else
+            {
+                AuctionItemsTop = new List<AuctionItem>();
+            }
+            InventoryPath = @Directory.GetCurrentDirectory() + "\\Inventory.json";
+            if (File.Exists(InventoryPath))
+            {
+                string Inventory = System.IO.File.ReadAllText(InventoryPath);
+                InventoryItemsTop = JsonConvert.DeserializeObject<List<InventoryItem>>(Inventory);
+            }
+            else
+            {
+                InventoryItemsTop = new List<InventoryItem>();
+            }
+
+
+            ConversionPath = @Directory.GetCurrentDirectory() + "\\Conversion.json";
+            if (File.Exists(ConversionPath))
+            {
+                string Conversion = System.IO.File.ReadAllText(ConversionPath);
+                ConversionItemsTop = JsonConvert.DeserializeObject<List<Conversion>>(Conversion);
+            }
+            else
+            {
+                ConversionItemsTop = new List<Conversion>();
+            }
             
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             Duration.SelectedIndex = 0;
-
-
-            IEnumerable<string> CollectionNames = DB.GetCollectionNames();
-            foreach (string name in CollectionNames)
+            List<string> itemnames = new List<string>();
+            foreach(AuctionItem auctionitem in AuctionItemsTop)
+            {
+                if(!itemnames.Contains(auctionitem.itemName))
+                {
+                    itemnames.Add(auctionitem.itemName);
+                }
+            }
+            if(RecipeItemsTop != null)
+            {
+                foreach (RecipeItem recipeitem in RecipeItemsTop)
+                {
+                    Crafting_Recipes_Recipe.Items.Add(recipeitem);
+                    Crafting_Recipes_RecipeItem.Items.Add(recipeitem);
+                }
+            }
+            foreach (string name in itemnames)
             {
 
                 ItemNameComboBox.Items.Add(name);
@@ -73,23 +126,11 @@ namespace Archage_Auction_House_Collector
                 Crafting_Recipes_RecipeItemName.AutoCompleteCustomSource.Add(name);
                 ItemName.AutoCompleteCustomSource.Add(name);
             }
-            var conversioncol = ConversionDB.GetCollection<Conversion>("Conversion");
-            var conversions = conversioncol.FindAll();
-            foreach(Conversion conversionitem in conversions)
+            foreach (InventoryItem inventoryitem in InventoryItemsTop)
             {
-                Conversion_Correction_ItemSelect.Items.Add(conversionitem);
+                Inventory_ExistingItem.Items.Add(inventoryitem.itemname);
             }
-            IEnumerable<string> Inventory_CollectionNames = InventoryDB.GetCollectionNames();
-            foreach (string name in Inventory_CollectionNames)
-            {
-                Inventory_ExistingItem.Items.Add(name);
-            }
-            if (Measurment.Items.Count > 0)
-            {
-                Measurment.SelectedIndex = 0;
-                ItemNameComboBox.SelectedIndex = 0;
-                MeasurementCorection.SelectedIndex = 0;
-            }
+            Inventory_Recalculate();
             timespanselect.SelectedIndex = 0;
         }
 
@@ -170,8 +211,17 @@ namespace Archage_Auction_House_Collector
             {
                 name = ItemNameComboBox.SelectedItem.ToString();
             }
+            int id = 0;
+            foreach(AuctionItem queryitem in AuctionItemsTop)
+            {
+                if(queryitem.Id > id)
+                {
+                    id = queryitem.Id;
+                }
+            }
             name = name.Replace(" ", "_");
             AuctionItem newItemEntry = new AuctionItem();
+            newItemEntry.Id = id + 1;
             newItemEntry.itemName = name;
             newItemEntry.BuyoutPrice = Buyout;
             newItemEntry.BidPrice = Bid;
@@ -189,14 +239,9 @@ namespace Archage_Auction_House_Collector
                 Crafting_Recipes_RecipeItemName.AutoCompleteCustomSource.Add(name);
                 ItemName.AutoCompleteCustomSource.Add(name);
             }
-            saveObjecttoDB(newItemEntry);
+            AuctionItemsTop.Add(newItemEntry);
             BuyoutinCopper.Text = "";
             BidInCopper.Text = "";
-        }
-        private void saveObjecttoDB(AuctionItem insert)
-        {
-            var col = DB.GetCollection<AuctionItem>(insert.itemName);
-            col.Insert(insert);
         }
 
         private void Measurment_SelectedIndexChanged(object sender, EventArgs e)
@@ -209,8 +254,8 @@ namespace Archage_Auction_House_Collector
         }
         private AuctionItem ReadDatabase(string _table, int starttimestamp,int endtimestamp)
         {
-            var col = DB.GetCollection<AuctionItem>(_table);
-            var results = col.Find(x => x.itemName == _table).Where(x => x.TimeStamp > starttimestamp).Where(x => x.TimeStamp < endtimestamp);
+
+            var results = AuctionItemsTop.Where(x => x.itemName == _table).Where(x => x.TimeStamp > starttimestamp).Where(x => x.TimeStamp < endtimestamp);
             AuctionItem returnItem = new AuctionItem();
             if (results.Count() > 0)
             {
@@ -391,8 +436,7 @@ namespace Archage_Auction_House_Collector
         {
             
             TimeStampList.Items.Clear();
-            var col = DB.GetCollection<AuctionItem>(MeasurementCorection.SelectedItem.ToString());
-            var results = col.FindAll();
+            var results = AuctionItemsTop.Where(x => x.itemName == MeasurementCorection.SelectedItem.ToString());
             foreach (var result in results)
             {
                 TimeStampList.Items.Add(result.Id + "," + result.itemName + "," + result.TimeStamp + ",Buyout: " + result.BuyoutPrice + ",Bid: " + result.BidPrice);
@@ -402,19 +446,19 @@ namespace Archage_Auction_House_Collector
         private void deletepoint_Click(object sender, EventArgs e)
         {
             List<object> itemstodelete = new List<object>();
+            AuctionItem auctionitem = null;
             foreach (var item in TimeStampList.CheckedItems)
             {
                 string[] _string = item.ToString().Split(',');
-                var loc = DB.GetCollection<AuctionItem>(_string[1]);
-                if (loc.Delete(Int32.Parse(_string[0])))
-                {
-                    itemstodelete.Add(item);
-                }
+                auctionitem = AuctionItemsTop.Where(x => x.Id == Int32.Parse(_string[0])).First();
+                AuctionItemsTop.Remove(auctionitem);
+                itemstodelete.Add(item);
             }
-            foreach (var item in itemstodelete)
+            foreach(var delete in itemstodelete)
             {
-                TimeStampList.Items.Remove(item);
+                TimeStampList.Items.Remove(delete);
             }
+            
         }
         private void Form_Resize(object sender, System.EventArgs e)
         {
@@ -500,16 +544,37 @@ namespace Archage_Auction_House_Collector
 
         private void Inventory_SellBtn_Click(object sender, EventArgs e)
         {
-            List<InventoryItem> itemstodelete = new List<InventoryItem>();
+            List<InventoryItem> itemstosell = new List<InventoryItem>();
+            if(Inventory_ItemList.CheckedItems.Count != 1)
+            {
+                MessageBox.Show("1 and only 1 element must be selected");
+                return;
+            }
             foreach(InventoryItem item in Inventory_ItemList.CheckedItems)
             {
-                itemstodelete.Add(item);
+                itemstosell.Add(item);
             }
-            foreach(InventoryItem item in itemstodelete)
+            foreach(InventoryItem item in itemstosell)
             {
                 Inventory_ItemList.Items.Remove(item);
-                var loc = InventoryDB.GetCollection<InventoryItem>(item.itemname);
-                loc.Delete(item.id);
+                
+                int amount;
+                Int32.TryParse(Inventory_TotalAmount.Text, out amount);
+                InventoryItem subitem = InventoryItemsTop.Where(x => x.itemname == item.itemname).First();
+                
+                if(subitem.amount > amount)
+                {
+                    
+                    InventoryItemsTop.Remove(subitem);
+                    subitem.converttotalcopper(Convert.ToInt32((double)subitem.priceincopper() * (1-((double)amount / (double)subitem.amount))));
+                    subitem.amount -= amount;
+                }
+                else
+                {
+                    MessageBox.Show("You cannot sell more than you have");
+                    return;
+                }
+                InventoryItemsTop.Add(subitem);
             }
             Inventory_Recalculate();
 
@@ -567,9 +632,33 @@ namespace Archage_Auction_House_Collector
                     insert.copper = copper;
                     insert.itemname = searchname.Replace(" ","_");
                     insert.amount = Int32.Parse(Inventory_Amount.Text);
-                    var col = InventoryDB.GetCollection<InventoryItem>(insert.itemname);
-                    col.Insert(insert);
-                    Inventory_ItemList.Items.Add(insert);
+                    InventoryItem item = null;
+                    try
+                    {
+                        item = InventoryItemsTop.Where(x => x.itemname == insert.itemname).First();
+                    }catch(Exception)
+                    {
+
+                    }
+                    if(item != null)
+                    {
+                        InventoryItemsTop.Remove(item);
+                        double conversion = ((double)insert.amount / (double)item.amount);
+                        int totalcopper = insert.priceincopper() + item.priceincopper();
+                        int newCopper = totalcopper % 100;
+                        int newSilver = Convert.ToInt32((totalcopper / 100)) % 100;
+                        int newGold = Convert.ToInt32((totalcopper / 100 / 100));
+                        item.copper = newCopper;
+                        item.silver = newSilver;
+                        item.gold = newGold;
+                        item.amount += insert.amount;
+                        InventoryItemsTop.Add(item);
+                    }
+                    else
+                    {
+                        InventoryItemsTop.Add(insert);
+                        Inventory_ExistingItem.Items.Add(insert.itemname);
+                    }
                     Inventory_Recalculate();
                 }
                 catch(Exception ex)
@@ -585,41 +674,12 @@ namespace Archage_Auction_House_Collector
                 return;
             }
         }
-
-        private void Inventory_ExistingItem_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string selected = Inventory_ExistingItem.Text;
-            var col = InventoryDB.GetCollection<InventoryItem>(selected);
-            var results = col.FindAll();
-            Inventory_ItemList.Items.Clear();
-            foreach (InventoryItem result in results)
-            {
-                Inventory_ItemList.Items.Add(result);
-            }
-            Inventory_Recalculate();
-        }
         public void Inventory_Recalculate()
         {
-            if(Inventory_ItemList.Items.Count > 0)
+            Inventory_ItemList.Items.Clear();
+            foreach(var item in InventoryItemsTop)
             {
-                int totalamount = 0;
-                int totalprice = 0;
-                foreach (InventoryItem item in Inventory_ItemList.Items)
-                {
-                    totalamount += item.amount;
-                    totalprice += item.priceincopper();
-                }
-                double averagepriceperpiece = totalprice / totalamount;
-                double newCopper = averagepriceperpiece % 100;
-                double newSilver = Convert.ToInt32((averagepriceperpiece / 100)) % 100;
-                double newGold = Convert.ToInt32((averagepriceperpiece / 100 / 100));
-                Inventory_TotalAmount.Text = totalamount.ToString();
-                Inventory_AveragePrice.Text = newGold + "g " + newSilver + "s " + newCopper + "c";
-            }
-            else
-            {
-                Inventory_TotalAmount.Text = "NAN";
-                Inventory_AveragePrice.Text = "NAN";
+                Inventory_ItemList.Items.Add(item);
             }
         }
 
@@ -661,9 +721,7 @@ namespace Archage_Auction_House_Collector
             newitem.ResultItemCount = resultitemcount;
             newitem.fixcost = fixcost;
             newitem.name = "Conversion";
-
-            var col = ConversionDB.GetCollection<Conversion>(newitem.name);
-            col.Insert(newitem);
+            ConversionItemsTop.Add(newitem);
         }
 
         private void Conversion_Check_Click(object sender, EventArgs e)
@@ -684,15 +742,12 @@ namespace Archage_Auction_House_Collector
                 MessageBox.Show("Workers Compensation Price must be given in Copper");
                 return;
             }
-            var col = ConversionDB.GetCollection<Conversion>("Conversion");
-            var results = col.FindAll();
+            var results = ConversionItemsTop;
             int starttimestamp = (int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - 86400/2;
             foreach(Conversion item in results)
             {
-                var resultpricecol = DB.GetCollection<AuctionItem>(item.ResultItem);
-                var resultpriceitems = resultpricecol.FindAll().Where(x => x.TimeStamp > starttimestamp);
-                var sourcepricecol = DB.GetCollection<AuctionItem>(item.SourceItem);
-                var sourcepriceitems = sourcepricecol.FindAll().Where(x => x.TimeStamp > starttimestamp);
+                var resultpriceitems = AuctionItemsTop.Where(x => x.itemName == item.ResultItem).Where(x => x.TimeStamp > starttimestamp);
+                var sourcepriceitems = AuctionItemsTop.Where(x => x.itemName == item.SourceItem).Where(x => x.TimeStamp > starttimestamp);
                 double minbuyprice = 9999999999;
                 foreach(var resultitem in resultpriceitems)
                 {
@@ -770,9 +825,8 @@ namespace Archage_Auction_House_Collector
         {
             List<object> itemstodelete = new List<object>();
             Conversion selecteditem = (Conversion) Conversion_Correction_ItemSelect.SelectedItem;
-            var loc = ConversionDB.GetCollection<Conversion>("Conversion");
+            ConversionItemsTop.Remove(selecteditem);
             Conversion_Correction_ItemSelect.Items.RemoveAt(Conversion_Correction_ItemSelect.SelectedIndex);
-            loc.Delete(selecteditem.Id);
         }
 
         private void Conversion_Correction_SaveBtn_Click(object sender, EventArgs e)
@@ -791,9 +845,8 @@ namespace Archage_Auction_House_Collector
             {
                 MessageBox.Show("No Letters in Numberfields!");
             }
-            var loc = ConversionDB.GetCollection<Conversion>("Conversion");
-            loc.Insert(newitem);
-            loc.Delete(selecteditem.Id);
+            ConversionItemsTop.Remove(selecteditem);
+            ConversionItemsTop.Add(newitem);
             Conversion_Correction_ItemSelect.Items.Remove(selecteditem);
             Conversion_Correction_ItemSelect.Items.Add(newitem);
             Conversion_Correction_ItemSelect.SelectedItem = newitem;
@@ -919,10 +972,68 @@ namespace Archage_Auction_House_Collector
             }
             foreach (RecipeItem item in RecipeItemsTop)
             {
-                RecipeItem tempitem = item.CheapestWayObtaining(DB,InventoryDB,laborcost/1000);
+                Dictionary<string, int> Materials = new Dictionary<string, int>();
+                int totalprice = 0;
+                RecipeItem tempitem = item.CheapestWayObtaining(AuctionItemsTop,InventoryItemsTop,laborcost/1000,ref Materials,ref totalprice);
                 Debug.WriteLine("test");
-                
             }
+        }
+
+        private void jsonifier_Click(object sender, EventArgs e)
+        {
+            
+            foreach (string collectionname in ConversionDB.GetCollectionNames())
+            {
+                var resultpricecol = ConversionDB.GetCollection<Conversion>(collectionname);
+                foreach (Conversion conversionitem in resultpricecol.FindAll())
+                {
+                    ConversionItemsTop.Add(conversionitem);
+                }
+            }
+            string jsonobject = JsonConvert.SerializeObject(ConversionItemsTop);
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(ConversionPath))
+            {
+                file.WriteLine(jsonobject);
+            }
+            
+            foreach(string collectionname in DB.GetCollectionNames())
+            {
+                var resultpricecol = DB.GetCollection<AuctionItem>(collectionname);
+                foreach(AuctionItem auctionitem in resultpricecol.FindAll())
+                {
+                    AuctionItemsTop.Add(auctionitem);
+                }
+            }
+            jsonobject = JsonConvert.SerializeObject(AuctionItemsTop);
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(AuctionPath))
+            {
+                file.WriteLine(jsonobject);
+            }
+            foreach (string collectionname in InventoryDB.GetCollectionNames())
+            {
+                var col = InventoryDB.GetCollection<InventoryItem>(collectionname);
+                foreach(InventoryItem inventoryitem in col.FindAll())
+                {
+                    InventoryItemsTop.Add(inventoryitem);
+                }
+            }
+            jsonobject = JsonConvert.SerializeObject(InventoryItemsTop);
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(InventoryPath))
+            {
+                file.WriteLine(jsonobject);
+            }
+
+        }
+        void OnProcessExit(object sender, EventArgs e)
+        {
+
+            
+            string jsonobject = JsonConvert.SerializeObject(InventoryItemsTop);
+            System.IO.File.WriteAllText(InventoryPath,jsonobject);
+            jsonobject = JsonConvert.SerializeObject(AuctionItemsTop);
+            System.IO.File.WriteAllText(AuctionPath, jsonobject);
+            jsonobject = JsonConvert.SerializeObject(ConversionItemsTop);
+            System.IO.File.WriteAllText(ConversionPath, jsonobject);
         }
     }
 }

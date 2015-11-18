@@ -67,8 +67,6 @@ namespace Archage_Auction_House_Collector
             this.label2 = new System.Windows.Forms.Label();
             this.Gold = new System.Windows.Forms.TextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.Inventory_AveragePrice = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.Inventory_TotalAmount = new System.Windows.Forms.TextBox();
             this.el13 = new System.Windows.Forms.Label();
             this.Inventory_SellBtn = new System.Windows.Forms.Button();
@@ -538,8 +536,6 @@ namespace Archage_Auction_House_Collector
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.Inventory_AveragePrice);
-            this.tabPage1.Controls.Add(this.label13);
             this.tabPage1.Controls.Add(this.Inventory_TotalAmount);
             this.tabPage1.Controls.Add(this.el13);
             this.tabPage1.Controls.Add(this.Inventory_SellBtn);
@@ -564,28 +560,9 @@ namespace Archage_Auction_House_Collector
             this.tabPage1.Text = "Inventory";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // Inventory_AveragePrice
-            // 
-            this.Inventory_AveragePrice.AccessibleName = "Inventory_Median_Price";
-            this.Inventory_AveragePrice.Enabled = false;
-            this.Inventory_AveragePrice.Location = new System.Drawing.Point(457, 139);
-            this.Inventory_AveragePrice.Name = "Inventory_AveragePrice";
-            this.Inventory_AveragePrice.Size = new System.Drawing.Size(67, 20);
-            this.Inventory_AveragePrice.TabIndex = 17;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(454, 123);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(47, 13);
-            this.label13.TabIndex = 16;
-            this.label13.Text = "Ø - Preis";
-            // 
             // Inventory_TotalAmount
             // 
             this.Inventory_TotalAmount.AccessibleName = "Inventory_TotalAmount";
-            this.Inventory_TotalAmount.Enabled = false;
             this.Inventory_TotalAmount.Location = new System.Drawing.Point(457, 91);
             this.Inventory_TotalAmount.Name = "Inventory_TotalAmount";
             this.Inventory_TotalAmount.Size = new System.Drawing.Size(67, 20);
@@ -596,9 +573,9 @@ namespace Archage_Auction_House_Collector
             this.el13.AutoSize = true;
             this.el13.Location = new System.Drawing.Point(454, 75);
             this.el13.Name = "el13";
-            this.el13.Size = new System.Drawing.Size(70, 13);
+            this.el13.Size = new System.Drawing.Size(87, 13);
             this.el13.TabIndex = 14;
-            this.el13.Text = "Total Amount";
+            this.el13.Text = "Sell/Use Amount";
             // 
             // Inventory_SellBtn
             // 
@@ -699,7 +676,6 @@ namespace Archage_Auction_House_Collector
             this.Inventory_ExistingItem.Name = "Inventory_ExistingItem";
             this.Inventory_ExistingItem.Size = new System.Drawing.Size(121, 21);
             this.Inventory_ExistingItem.TabIndex = 2;
-            this.Inventory_ExistingItem.SelectedIndexChanged += new System.EventHandler(this.Inventory_ExistingItem_SelectedIndexChanged);
             // 
             // label8
             // 
@@ -1456,8 +1432,6 @@ namespace Archage_Auction_House_Collector
         private System.Windows.Forms.TextBox Inventory_Copper;
         private System.Windows.Forms.TextBox Inventory_TotalAmount;
         private System.Windows.Forms.Label el13;
-        private System.Windows.Forms.TextBox Inventory_AveragePrice;
-        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage4;

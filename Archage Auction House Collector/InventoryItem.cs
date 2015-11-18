@@ -49,5 +49,11 @@ namespace Archage_Auction_House_Collector
             double newGold = Convert.ToInt32((priceper / 100 / 100));
             return itemname +" "+amount+" pieces @ "+ newGold + "g " + newSilver + "s "+ newCopper + "c ";
         }
+        public void converttotalcopper(int totalcopper)
+        {
+            copper = totalcopper % 100;
+            silver = Convert.ToInt32((totalcopper / 100)) % 100;
+            gold = Convert.ToInt32((totalcopper / 100 / 100));
+        }
     }
 }
