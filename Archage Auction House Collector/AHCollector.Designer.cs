@@ -132,7 +132,6 @@ namespace Archage_Auction_House_Collector
             this.Crafting_Recipes_SaveRecipe = new System.Windows.Forms.Button();
             this.label31 = new System.Windows.Forms.Label();
             this.Crafting_Recipes_RecipeItemCost = new System.Windows.Forms.TextBox();
-            this.Crafting_Recipes_RecipeItemName = new System.Windows.Forms.TextBox();
             this.Craftin_Recipes_AddRecipeItem = new System.Windows.Forms.Button();
             this.label30 = new System.Windows.Forms.Label();
             this.Crafting_Recipes_RecipeItemAmount = new System.Windows.Forms.TextBox();
@@ -151,6 +150,7 @@ namespace Archage_Auction_House_Collector
             this.Crafting_Profit_Check = new System.Windows.Forms.Button();
             this.Crafting_Profit_List = new System.Windows.Forms.CheckedListBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.Crafting_Recipes_AddRecipe = new System.Windows.Forms.Button();
             this.Tabs.SuspendLayout();
             this.DataEntry.SuspendLayout();
             this.DataExploration.SuspendLayout();
@@ -1109,12 +1109,12 @@ namespace Archage_Auction_House_Collector
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_AddRecipe);
             this.tabPage6.Controls.Add(this.label32);
             this.tabPage6.Controls.Add(this.Crafting_Recipes_LaborCost);
             this.tabPage6.Controls.Add(this.Crafting_Recipes_SaveRecipe);
             this.tabPage6.Controls.Add(this.label31);
             this.tabPage6.Controls.Add(this.Crafting_Recipes_RecipeItemCost);
-            this.tabPage6.Controls.Add(this.Crafting_Recipes_RecipeItemName);
             this.tabPage6.Controls.Add(this.Craftin_Recipes_AddRecipeItem);
             this.tabPage6.Controls.Add(this.label30);
             this.tabPage6.Controls.Add(this.Crafting_Recipes_RecipeItemAmount);
@@ -1149,7 +1149,7 @@ namespace Archage_Auction_House_Collector
             // 
             // Crafting_Recipes_SaveRecipe
             // 
-            this.Crafting_Recipes_SaveRecipe.Location = new System.Drawing.Point(9, 209);
+            this.Crafting_Recipes_SaveRecipe.Location = new System.Drawing.Point(463, 212);
             this.Crafting_Recipes_SaveRecipe.Name = "Crafting_Recipes_SaveRecipe";
             this.Crafting_Recipes_SaveRecipe.Size = new System.Drawing.Size(98, 23);
             this.Crafting_Recipes_SaveRecipe.TabIndex = 9;
@@ -1172,15 +1172,6 @@ namespace Archage_Auction_House_Collector
             this.Crafting_Recipes_RecipeItemCost.Name = "Crafting_Recipes_RecipeItemCost";
             this.Crafting_Recipes_RecipeItemCost.Size = new System.Drawing.Size(121, 20);
             this.Crafting_Recipes_RecipeItemCost.TabIndex = 6;
-            // 
-            // Crafting_Recipes_RecipeItemName
-            // 
-            this.Crafting_Recipes_RecipeItemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.Crafting_Recipes_RecipeItemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.Crafting_Recipes_RecipeItemName.Location = new System.Drawing.Point(187, 58);
-            this.Crafting_Recipes_RecipeItemName.Name = "Crafting_Recipes_RecipeItemName";
-            this.Crafting_Recipes_RecipeItemName.Size = new System.Drawing.Size(121, 20);
-            this.Crafting_Recipes_RecipeItemName.TabIndex = 4;
             // 
             // Craftin_Recipes_AddRecipeItem
             // 
@@ -1230,7 +1221,7 @@ namespace Archage_Auction_House_Collector
             // 
             // Crafting_Recipes_RecipeName
             // 
-            this.Crafting_Recipes_RecipeName.Location = new System.Drawing.Point(9, 54);
+            this.Crafting_Recipes_RecipeName.Location = new System.Drawing.Point(9, 187);
             this.Crafting_Recipes_RecipeName.Name = "Crafting_Recipes_RecipeName";
             this.Crafting_Recipes_RecipeName.Size = new System.Drawing.Size(121, 20);
             this.Crafting_Recipes_RecipeName.TabIndex = 2;
@@ -1338,6 +1329,16 @@ namespace Archage_Auction_House_Collector
             this.Crafting_Profit_List.Name = "Crafting_Profit_List";
             this.Crafting_Profit_List.Size = new System.Drawing.Size(324, 214);
             this.Crafting_Profit_List.TabIndex = 0;
+            // 
+            // Crafting_Recipes_AddRecipe
+            // 
+            this.Crafting_Recipes_AddRecipe.Location = new System.Drawing.Point(9, 213);
+            this.Crafting_Recipes_AddRecipe.Name = "Crafting_Recipes_AddRecipe";
+            this.Crafting_Recipes_AddRecipe.Size = new System.Drawing.Size(121, 23);
+            this.Crafting_Recipes_AddRecipe.TabIndex = 20;
+            this.Crafting_Recipes_AddRecipe.Text = "AddRecipe";
+            this.Crafting_Recipes_AddRecipe.UseVisualStyleBackColor = true;
+            this.Crafting_Recipes_AddRecipe.Click += new System.EventHandler(this.Crafting_Recipes_AddRecipe_Click);
             // 
             // Archage_AH_DataCollector
             // 
@@ -1482,7 +1483,6 @@ namespace Archage_Auction_House_Collector
         private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.ComboBox Crafting_Recipes_RecipeItem;
         private System.Windows.Forms.Label label29;
-        private System.Windows.Forms.TextBox Crafting_Recipes_RecipeItemName;
         private System.Windows.Forms.Button Craftin_Recipes_AddRecipeItem;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.TextBox Crafting_Recipes_RecipeItemAmount;
@@ -1499,6 +1499,7 @@ namespace Archage_Auction_House_Collector
         private System.Windows.Forms.TextBox Crafting_Recipes_Profit_LaborInMoney;
         private System.Windows.Forms.TextBox Crafting_Profit_Profit;
         private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Button Crafting_Recipes_AddRecipe;
     }
 }
 

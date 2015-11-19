@@ -80,8 +80,6 @@ namespace Archage_Auction_House_Collector
             {
                 InventoryItemsTop = new List<InventoryItem>();
             }
-
-
             ConversionPath = @Directory.GetCurrentDirectory() + "\\Conversion.json";
             if (File.Exists(ConversionPath))
             {
@@ -92,7 +90,6 @@ namespace Archage_Auction_House_Collector
             {
                 ConversionItemsTop = new List<Conversion>();
             }
-            
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -123,7 +120,6 @@ namespace Archage_Auction_House_Collector
                 Conversion_Result_Item.Items.Add(name);
                 Conversion_Correction_BaseItem.Items.Add(name);
                 Conversion_Correction_ResultITem.Items.Add(name);
-                Crafting_Recipes_RecipeItemName.AutoCompleteCustomSource.Add(name);
                 ItemName.AutoCompleteCustomSource.Add(name);
             }
             foreach (InventoryItem inventoryitem in InventoryItemsTop)
@@ -236,7 +232,6 @@ namespace Archage_Auction_House_Collector
                 Conversion_Correction_BaseItem.Items.Add(name);
                 Conversion_Correction_ResultITem.Items.Add(name);
                 ItemNameComboBox.SelectedIndex = ItemNameComboBox.Items.Count -1;
-                Crafting_Recipes_RecipeItemName.AutoCompleteCustomSource.Add(name);
                 ItemName.AutoCompleteCustomSource.Add(name);
             }
             AuctionItemsTop.Add(newItemEntry);
@@ -872,7 +867,6 @@ namespace Archage_Auction_House_Collector
             if (Crafting_Recipes_RecipeName.Text != "")
             {
                 RecipeName = Crafting_Recipes_RecipeName.Text;
-                newitem = true;
             }
             else
             {
@@ -892,20 +886,12 @@ namespace Archage_Auction_House_Collector
                 MessageBox.Show("Recipe must be set/selected");
                 return;
             }
-
-            if (Crafting_Recipes_RecipeItemName.Text != "")
+            if(Crafting_Recipes_RecipeItem.SelectedItem != "")
             {
-                RecipeItemName = Crafting_Recipes_RecipeItemName.Text;
+                RecipeItemName = Crafting_Recipes_RecipeItem.SelectedItem.ToString();
+                subRecipeItem = (RecipeItem) Crafting_Recipes_RecipeItem.SelectedItem;
             }
-            else
-            {
-                if(Crafting_Recipes_RecipeItem.SelectedItem != "")
-                {
-                    RecipeItemName = Crafting_Recipes_RecipeItem.SelectedItem.ToString();
-                    subRecipeItem = (RecipeItem) Crafting_Recipes_RecipeItem.SelectedItem;
-                    newSubitem = true;
-                }
-            }
+            
             if(RecipeItemName == "")
             {
                 MessageBox.Show("Recipe Item must be set/selected");
@@ -917,33 +903,15 @@ namespace Archage_Auction_House_Collector
                 return;
             }
             Int32.TryParse(Crafting_Recipes_RecipeItemCost.Text, out Cost);
-            RecipeItem Item;
-            if(newitem)
-            {
-                Item = new RecipeItem();
-                Item.Amount = Amount;
-                Item.Name = RecipeName.Replace(" ", "_");
-                Item.vendorcost = Cost;
-                Item.LaborCost = LaborCost;
-                if(subRecipeItem != null)
-                {
-                    Item.AddSubItem(subRecipeItem);
-                }
-                Crafting_Recipes_Recipe.Items.Add(Item);
-                Crafting_Recipes_RecipeItem.Items.Add(Item);
-                Crafting_Recipes_Recipe.SelectedItem = Item;
-            }
-            else
-            {
-                Item = (RecipeItem)Crafting_Recipes_Recipe.SelectedItem;
-                Crafting_Recipes_RecipeItem.Items.Remove(Item);
+            
 
-                RecipeItem Subitem = new RecipeItem();
-                Subitem = (RecipeItem) Crafting_Recipes_RecipeItem.SelectedItem;
-                Item.AddSubItem(Subitem);
-                Crafting_Recipes_RecipeItem.Items.Add(Item);
-            }
-            Crafting_Recipes_RecipeItemName.Text = "";
+            RecipeItem Subitem = new RecipeItem();
+            Subitem.Name = ((RecipeItem) Crafting_Recipes_RecipeItem.SelectedItem).Name;
+            Subitem.Amount = Amount;
+            Subitem.Cost = Cost;
+            Subitem.LaborCost = LaborCost;
+            ((RecipeItem)Crafting_Recipes_Recipe.SelectedItem).AddSubItem(Subitem);
+
         }
 
         private void Crafting_Recipes_SaveRecipe_Click(object sender, EventArgs e)
@@ -974,8 +942,16 @@ namespace Archage_Auction_House_Collector
             {
                 Dictionary<string, int> Materials = new Dictionary<string, int>();
                 int totalprice = 0;
-                RecipeItem tempitem = item.CheapestWayObtaining(AuctionItemsTop,InventoryItemsTop,laborcost/1000,ref Materials,ref totalprice);
-                Debug.WriteLine("test");
+                try
+                {
+                    RecipeSummaryItem tempitem = item.CheapestWayObtaining(AuctionItemsTop, InventoryItemsTop, laborcost / 1000);
+                    Debug.WriteLine("test");
+                }
+                catch(ArgumentException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                
             }
         }
 
@@ -1034,6 +1010,27 @@ namespace Archage_Auction_House_Collector
             System.IO.File.WriteAllText(AuctionPath, jsonobject);
             jsonobject = JsonConvert.SerializeObject(ConversionItemsTop);
             System.IO.File.WriteAllText(ConversionPath, jsonobject);
+        }
+
+        private void Crafting_Recipes_AddRecipe_Click(object sender, EventArgs e)
+        {
+            string name;
+            if(Crafting_Recipes_RecipeName.Text != "")
+            {
+                name = Crafting_Recipes_RecipeName.Text;
+            }
+            else
+            {
+                MessageBox.Show("Recipe must have a name");
+                return;
+            }
+            
+            RecipeItem newitem = new RecipeItem();
+            newitem.Name = name.Replace(" ","_").ToLower();
+            Crafting_Recipes_Recipe.Items.Add(newitem);
+            Crafting_Recipes_RecipeItem.Items.Add(newitem);
+            RecipeItemsTop.Add(newitem);
+            Crafting_Recipes_RecipeName.Text = "";
         }
     }
 }
