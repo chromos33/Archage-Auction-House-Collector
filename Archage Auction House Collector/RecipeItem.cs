@@ -158,7 +158,7 @@ namespace Archage_Auction_House_Collector
             }
             else
             {
-                // do the rest
+                // do the rest (only ever use 1 RecipeSummaryItem)(return it but then take it appart and add to the "parent" recipesummaryitem)
             }
             return upwarditem;
         }
