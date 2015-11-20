@@ -41,6 +41,7 @@ namespace Archage_Auction_House_Collector
             this.MeasurementLabel = new System.Windows.Forms.Label();
             this.Tabs = new System.Windows.Forms.TabControl();
             this.DataEntry = new System.Windows.Forms.TabPage();
+            this.DataEntry_Delete = new System.Windows.Forms.Button();
             this.ItemNameComboBox = new System.Windows.Forms.ComboBox();
             this.DataExploration = new System.Windows.Forms.TabPage();
             this.updatechart = new System.Windows.Forms.Button();
@@ -127,6 +128,8 @@ namespace Archage_Auction_House_Collector
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.Crafting_Recipes_Delete_Recipe = new System.Windows.Forms.Button();
+            this.Crafting_Recipes_AddRecipe = new System.Windows.Forms.Button();
             this.label32 = new System.Windows.Forms.Label();
             this.Crafting_Recipes_LaborCost = new System.Windows.Forms.TextBox();
             this.Crafting_Recipes_SaveRecipe = new System.Windows.Forms.Button();
@@ -141,6 +144,8 @@ namespace Archage_Auction_House_Collector
             this.Crafting_Recipes_Recipe = new System.Windows.Forms.ComboBox();
             this.label28 = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.Crafting_Profit_Craft_Amount = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.Crafting_Profit_Profit = new System.Windows.Forms.TextBox();
             this.label34 = new System.Windows.Forms.Label();
             this.Crafting_Recipes_Profit_LaborInMoney = new System.Windows.Forms.TextBox();
@@ -149,8 +154,12 @@ namespace Archage_Auction_House_Collector
             this.Crafting_Profit_Calculate = new System.Windows.Forms.Button();
             this.Crafting_Profit_Check = new System.Windows.Forms.Button();
             this.Crafting_Profit_List = new System.Windows.Forms.CheckedListBox();
+            this.Settings = new System.Windows.Forms.TabPage();
+            this.jsonifier = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.Crafting_Recipes_AddRecipe = new System.Windows.Forms.Button();
+            this.AuctionItemsToDelete = new System.Windows.Forms.CheckedListBox();
+            this.AuctionHouseItems = new System.Windows.Forms.Label();
+            this.DeleteAuctions = new System.Windows.Forms.Button();
             this.Tabs.SuspendLayout();
             this.DataEntry.SuspendLayout();
             this.DataExploration.SuspendLayout();
@@ -165,6 +174,7 @@ namespace Archage_Auction_House_Collector
             this.tabControl2.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.Settings.SuspendLayout();
             this.SuspendLayout();
             // 
             // ItemNameLabel
@@ -256,6 +266,7 @@ namespace Archage_Auction_House_Collector
             this.Tabs.Controls.Add(this.tabPage1);
             this.Tabs.Controls.Add(this.tabPage2);
             this.Tabs.Controls.Add(this.tabPage3);
+            this.Tabs.Controls.Add(this.Settings);
             this.Tabs.Location = new System.Drawing.Point(-2, -1);
             this.Tabs.Name = "Tabs";
             this.Tabs.SelectedIndex = 0;
@@ -264,6 +275,7 @@ namespace Archage_Auction_House_Collector
             // 
             // DataEntry
             // 
+            this.DataEntry.Controls.Add(this.DataEntry_Delete);
             this.DataEntry.Controls.Add(this.ItemNameComboBox);
             this.DataEntry.Controls.Add(this.ItemNameLabel);
             this.DataEntry.Controls.Add(this.Save_btn);
@@ -279,6 +291,17 @@ namespace Archage_Auction_House_Collector
             this.DataEntry.TabIndex = 0;
             this.DataEntry.Text = "Data entry";
             this.DataEntry.UseVisualStyleBackColor = true;
+            // 
+            // DataEntry_Delete
+            // 
+            this.DataEntry_Delete.Location = new System.Drawing.Point(10, 254);
+            this.DataEntry_Delete.Name = "DataEntry_Delete";
+            this.DataEntry_Delete.Size = new System.Drawing.Size(75, 23);
+            this.DataEntry_Delete.TabIndex = 12;
+            this.DataEntry_Delete.Text = "Delete";
+            this.DataEntry_Delete.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.DataEntry_Delete.UseVisualStyleBackColor = false;
+            this.DataEntry_Delete.Click += new System.EventHandler(this.DataEntry_Delete_Click);
             // 
             // ItemNameComboBox
             // 
@@ -671,6 +694,8 @@ namespace Archage_Auction_House_Collector
             // 
             // Inventory_ExistingItem
             // 
+            this.Inventory_ExistingItem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.Inventory_ExistingItem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.Inventory_ExistingItem.FormattingEnabled = true;
             this.Inventory_ExistingItem.Location = new System.Drawing.Point(6, 48);
             this.Inventory_ExistingItem.Name = "Inventory_ExistingItem";
@@ -688,6 +713,8 @@ namespace Archage_Auction_House_Collector
             // 
             // Inventory_NewItem
             // 
+            this.Inventory_NewItem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.Inventory_NewItem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.Inventory_NewItem.Location = new System.Drawing.Point(6, 22);
             this.Inventory_NewItem.Name = "Inventory_NewItem";
             this.Inventory_NewItem.Size = new System.Drawing.Size(121, 20);
@@ -1109,6 +1136,7 @@ namespace Archage_Auction_House_Collector
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.Crafting_Recipes_Delete_Recipe);
             this.tabPage6.Controls.Add(this.Crafting_Recipes_AddRecipe);
             this.tabPage6.Controls.Add(this.label32);
             this.tabPage6.Controls.Add(this.Crafting_Recipes_LaborCost);
@@ -1130,6 +1158,26 @@ namespace Archage_Auction_House_Collector
             this.tabPage6.TabIndex = 0;
             this.tabPage6.Text = "Recipes";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // Crafting_Recipes_Delete_Recipe
+            // 
+            this.Crafting_Recipes_Delete_Recipe.Location = new System.Drawing.Point(9, 103);
+            this.Crafting_Recipes_Delete_Recipe.Name = "Crafting_Recipes_Delete_Recipe";
+            this.Crafting_Recipes_Delete_Recipe.Size = new System.Drawing.Size(121, 23);
+            this.Crafting_Recipes_Delete_Recipe.TabIndex = 21;
+            this.Crafting_Recipes_Delete_Recipe.Text = "Delete recipe";
+            this.Crafting_Recipes_Delete_Recipe.UseVisualStyleBackColor = true;
+            this.Crafting_Recipes_Delete_Recipe.Click += new System.EventHandler(this.Crafting_Recipes_Delete_Recipe_Click);
+            // 
+            // Crafting_Recipes_AddRecipe
+            // 
+            this.Crafting_Recipes_AddRecipe.Location = new System.Drawing.Point(9, 213);
+            this.Crafting_Recipes_AddRecipe.Name = "Crafting_Recipes_AddRecipe";
+            this.Crafting_Recipes_AddRecipe.Size = new System.Drawing.Size(121, 23);
+            this.Crafting_Recipes_AddRecipe.TabIndex = 20;
+            this.Crafting_Recipes_AddRecipe.Text = "AddRecipe";
+            this.Crafting_Recipes_AddRecipe.UseVisualStyleBackColor = true;
+            this.Crafting_Recipes_AddRecipe.Click += new System.EventHandler(this.Crafting_Recipes_AddRecipe_Click);
             // 
             // label32
             // 
@@ -1245,6 +1293,8 @@ namespace Archage_Auction_House_Collector
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.Crafting_Profit_Craft_Amount);
+            this.tabPage7.Controls.Add(this.label13);
             this.tabPage7.Controls.Add(this.Crafting_Profit_Profit);
             this.tabPage7.Controls.Add(this.label34);
             this.tabPage7.Controls.Add(this.Crafting_Recipes_Profit_LaborInMoney);
@@ -1261,12 +1311,30 @@ namespace Archage_Auction_House_Collector
             this.tabPage7.Text = "Profit";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // Crafting_Profit_Craft_Amount
+            // 
+            this.Crafting_Profit_Craft_Amount.Location = new System.Drawing.Point(100, 215);
+            this.Crafting_Profit_Craft_Amount.Name = "Crafting_Profit_Craft_Amount";
+            this.Crafting_Profit_Craft_Amount.Size = new System.Drawing.Size(100, 20);
+            this.Crafting_Profit_Craft_Amount.TabIndex = 12;
+            this.Crafting_Profit_Craft_Amount.Text = "1";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(6, 218);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(71, 13);
+            this.label13.TabIndex = 11;
+            this.label13.Text = "Craft Amount:";
+            // 
             // Crafting_Profit_Profit
             // 
             this.Crafting_Profit_Profit.Location = new System.Drawing.Point(248, 10);
             this.Crafting_Profit_Profit.Name = "Crafting_Profit_Profit";
             this.Crafting_Profit_Profit.Size = new System.Drawing.Size(44, 20);
             this.Crafting_Profit_Profit.TabIndex = 10;
+            this.Crafting_Profit_Profit.Text = "0";
             // 
             // label34
             // 
@@ -1284,6 +1352,7 @@ namespace Archage_Auction_House_Collector
             this.Crafting_Recipes_Profit_LaborInMoney.Name = "Crafting_Recipes_Profit_LaborInMoney";
             this.Crafting_Recipes_Profit_LaborInMoney.Size = new System.Drawing.Size(100, 20);
             this.Crafting_Recipes_Profit_LaborInMoney.TabIndex = 8;
+            this.Crafting_Recipes_Profit_LaborInMoney.Text = "0";
             // 
             // label33
             // 
@@ -1298,9 +1367,9 @@ namespace Archage_Auction_House_Collector
             // Crafting_Profit_Resources
             // 
             this.Crafting_Profit_Resources.FormattingEnabled = true;
-            this.Crafting_Profit_Resources.Location = new System.Drawing.Point(341, 6);
+            this.Crafting_Profit_Resources.Location = new System.Drawing.Point(415, 6);
             this.Crafting_Profit_Resources.Name = "Crafting_Profit_Resources";
-            this.Crafting_Profit_Resources.Size = new System.Drawing.Size(245, 212);
+            this.Crafting_Profit_Resources.Size = new System.Drawing.Size(171, 212);
             this.Crafting_Profit_Resources.TabIndex = 6;
             // 
             // Crafting_Profit_Calculate
@@ -1311,10 +1380,11 @@ namespace Archage_Auction_House_Collector
             this.Crafting_Profit_Calculate.TabIndex = 5;
             this.Crafting_Profit_Calculate.Text = "Calculate Resources";
             this.Crafting_Profit_Calculate.UseVisualStyleBackColor = true;
+            this.Crafting_Profit_Calculate.Click += new System.EventHandler(this.Crafting_Profit_Calculate_Click);
             // 
             // Crafting_Profit_Check
             // 
-            this.Crafting_Profit_Check.Location = new System.Drawing.Point(341, 223);
+            this.Crafting_Profit_Check.Location = new System.Drawing.Point(415, 223);
             this.Crafting_Profit_Check.Name = "Crafting_Profit_Check";
             this.Crafting_Profit_Check.Size = new System.Drawing.Size(85, 23);
             this.Crafting_Profit_Check.TabIndex = 4;
@@ -1325,20 +1395,62 @@ namespace Archage_Auction_House_Collector
             // Crafting_Profit_List
             // 
             this.Crafting_Profit_List.FormattingEnabled = true;
-            this.Crafting_Profit_List.Location = new System.Drawing.Point(2, 36);
+            this.Crafting_Profit_List.Location = new System.Drawing.Point(5, 36);
             this.Crafting_Profit_List.Name = "Crafting_Profit_List";
-            this.Crafting_Profit_List.Size = new System.Drawing.Size(324, 214);
+            this.Crafting_Profit_List.Size = new System.Drawing.Size(404, 169);
             this.Crafting_Profit_List.TabIndex = 0;
+            this.Crafting_Profit_List.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.Crafting_Profit_List_ItemCheck);
             // 
-            // Crafting_Recipes_AddRecipe
+            // Settings
             // 
-            this.Crafting_Recipes_AddRecipe.Location = new System.Drawing.Point(9, 213);
-            this.Crafting_Recipes_AddRecipe.Name = "Crafting_Recipes_AddRecipe";
-            this.Crafting_Recipes_AddRecipe.Size = new System.Drawing.Size(121, 23);
-            this.Crafting_Recipes_AddRecipe.TabIndex = 20;
-            this.Crafting_Recipes_AddRecipe.Text = "AddRecipe";
-            this.Crafting_Recipes_AddRecipe.UseVisualStyleBackColor = true;
-            this.Crafting_Recipes_AddRecipe.Click += new System.EventHandler(this.Crafting_Recipes_AddRecipe_Click);
+            this.Settings.Controls.Add(this.DeleteAuctions);
+            this.Settings.Controls.Add(this.AuctionHouseItems);
+            this.Settings.Controls.Add(this.AuctionItemsToDelete);
+            this.Settings.Controls.Add(this.jsonifier);
+            this.Settings.Location = new System.Drawing.Point(4, 22);
+            this.Settings.Name = "Settings";
+            this.Settings.Padding = new System.Windows.Forms.Padding(3);
+            this.Settings.Size = new System.Drawing.Size(606, 284);
+            this.Settings.TabIndex = 8;
+            this.Settings.Text = "Settings";
+            this.Settings.UseVisualStyleBackColor = true;
+            // 
+            // jsonifier
+            // 
+            this.jsonifier.Location = new System.Drawing.Point(20, 20);
+            this.jsonifier.Name = "jsonifier";
+            this.jsonifier.Size = new System.Drawing.Size(75, 23);
+            this.jsonifier.TabIndex = 0;
+            this.jsonifier.Text = "DBtoJson";
+            this.jsonifier.UseVisualStyleBackColor = true;
+            this.jsonifier.Click += new System.EventHandler(this.jsonifier_Click);
+            // 
+            // AuctionItemsToDelete
+            // 
+            this.AuctionItemsToDelete.FormattingEnabled = true;
+            this.AuctionItemsToDelete.Location = new System.Drawing.Point(388, 50);
+            this.AuctionItemsToDelete.Name = "AuctionItemsToDelete";
+            this.AuctionItemsToDelete.Size = new System.Drawing.Size(164, 199);
+            this.AuctionItemsToDelete.TabIndex = 1;
+            // 
+            // AuctionHouseItems
+            // 
+            this.AuctionHouseItems.AutoSize = true;
+            this.AuctionHouseItems.Location = new System.Drawing.Point(385, 25);
+            this.AuctionHouseItems.Name = "AuctionHouseItems";
+            this.AuctionHouseItems.Size = new System.Drawing.Size(149, 13);
+            this.AuctionHouseItems.TabIndex = 2;
+            this.AuctionHouseItems.Text = "Complete Delete AuctionItems";
+            // 
+            // DeleteAuctions
+            // 
+            this.DeleteAuctions.Location = new System.Drawing.Point(388, 254);
+            this.DeleteAuctions.Name = "DeleteAuctions";
+            this.DeleteAuctions.Size = new System.Drawing.Size(164, 23);
+            this.DeleteAuctions.TabIndex = 3;
+            this.DeleteAuctions.Text = "button1";
+            this.DeleteAuctions.UseVisualStyleBackColor = true;
+            this.DeleteAuctions.Click += new System.EventHandler(this.DeleteAuctions_Click);
             // 
             // Archage_AH_DataCollector
             // 
@@ -1374,6 +1486,8 @@ namespace Archage_Auction_House_Collector
             this.tabPage6.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
+            this.Settings.ResumeLayout(false);
+            this.Settings.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1500,6 +1614,15 @@ namespace Archage_Auction_House_Collector
         private System.Windows.Forms.TextBox Crafting_Profit_Profit;
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.Button Crafting_Recipes_AddRecipe;
+        private System.Windows.Forms.TextBox Crafting_Profit_Craft_Amount;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button Crafting_Recipes_Delete_Recipe;
+        private System.Windows.Forms.TabPage Settings;
+        private System.Windows.Forms.Button jsonifier;
+        private System.Windows.Forms.Button DataEntry_Delete;
+        private System.Windows.Forms.Button DeleteAuctions;
+        private System.Windows.Forms.Label AuctionHouseItems;
+        private System.Windows.Forms.CheckedListBox AuctionItemsToDelete;
     }
 }
 

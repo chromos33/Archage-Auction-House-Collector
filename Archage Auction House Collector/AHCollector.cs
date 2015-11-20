@@ -12,6 +12,7 @@ using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using LiteDB;
+using System.Windows.Input;
 
 namespace Archage_Auction_House_Collector
 {
@@ -121,6 +122,8 @@ namespace Archage_Auction_House_Collector
                 Conversion_Correction_BaseItem.Items.Add(name);
                 Conversion_Correction_ResultITem.Items.Add(name);
                 ItemName.AutoCompleteCustomSource.Add(name);
+                AuctionItemsToDelete.Items.Add(name);
+                Inventory_NewItem.AutoCompleteCustomSource.Add(name);
             }
             foreach (InventoryItem inventoryitem in InventoryItemsTop)
             {
@@ -557,7 +560,7 @@ namespace Archage_Auction_House_Collector
                 Int32.TryParse(Inventory_TotalAmount.Text, out amount);
                 InventoryItem subitem = InventoryItemsTop.Where(x => x.itemname == item.itemname).First();
                 
-                if(subitem.amount > amount)
+                if(subitem.amount >= amount)
                 {
                     
                     InventoryItemsTop.Remove(subitem);
@@ -569,7 +572,11 @@ namespace Archage_Auction_House_Collector
                     MessageBox.Show("You cannot sell more than you have");
                     return;
                 }
-                InventoryItemsTop.Add(subitem);
+                if(subitem.amount > 0)
+                {
+                    InventoryItemsTop.Add(subitem);
+                }
+                
             }
             Inventory_Recalculate();
 
@@ -945,7 +952,26 @@ namespace Archage_Auction_House_Collector
                 try
                 {
                     RecipeSummaryItem tempitem = item.CheapestWayObtaining(AuctionItemsTop, InventoryItemsTop, laborcost / 1000);
-                    Debug.WriteLine("test");
+                    var sellpriceitems = AuctionItemsTop.Where(x => x.itemName == item.Name).Where(x => x.TimeStamp > Timestamp(60 * 60 * 24 * 14));
+                    double lowestprice = 999999999;
+                    foreach(AuctionItem test in sellpriceitems)
+                    {
+                        if(test.BuyoutPrice < lowestprice)
+                        {
+                            lowestprice = test.BuyoutPrice;
+                        }
+                    }
+                    double profitmargin = 0;
+                    if(!double.TryParse(Crafting_Profit_Profit.Text, out profitmargin))
+                    {
+                        MessageBox.Show("Profit % must be at least 0");
+                    }
+                    if(tempitem.totalprice*(1+profitmargin/100)<(lowestprice*0.94))
+                    {
+                        tempitem.name = item.Name;
+                        tempitem.profitmargin = (1 - (tempitem.totalprice / (lowestprice * 0.94)))*100;
+                        Crafting_Profit_List.Items.Add(tempitem);
+                    }
                 }
                 catch(ArgumentException ex)
                 {
@@ -954,7 +980,10 @@ namespace Archage_Auction_House_Collector
                 
             }
         }
-
+        public int Timestamp(int deduct = 0)
+        {
+            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - deduct;
+        }
         private void jsonifier_Click(object sender, EventArgs e)
         {
             
@@ -1002,8 +1031,6 @@ namespace Archage_Auction_House_Collector
         }
         void OnProcessExit(object sender, EventArgs e)
         {
-
-            
             string jsonobject = JsonConvert.SerializeObject(InventoryItemsTop);
             System.IO.File.WriteAllText(InventoryPath,jsonobject);
             jsonobject = JsonConvert.SerializeObject(AuctionItemsTop);
@@ -1031,6 +1058,81 @@ namespace Archage_Auction_House_Collector
             Crafting_Recipes_RecipeItem.Items.Add(newitem);
             RecipeItemsTop.Add(newitem);
             Crafting_Recipes_RecipeName.Text = "";
+        }
+
+        private void Crafting_Profit_Calculate_Click(object sender, EventArgs e)
+        {
+            Crafting_Profit_Resources.Items.Clear();
+            RecipeSummaryItem totalressources = new RecipeSummaryItem();
+            foreach(RecipeSummaryItem item in Crafting_Profit_List.Items)
+            {
+                totalressources.CombineSummaryItem(item);
+            }
+            int amount = 1;
+            if(!Int32.TryParse(Crafting_Profit_Craft_Amount.Text,out amount))
+            {
+                MessageBox.Show("Craft amount must be at least 1");
+                return;
+            }
+            foreach(RecipeCraftingItems items in totalressources.CraftingItems)
+            {
+                string add = "";
+                switch(items.aquirementtype)
+                {
+                    case 1: add +="Buy: "; break;
+                    case 2: add +="Take out of Inventory: "; break;
+                    case 3: add +="Craft: "; break;
+                }
+                add += amount * items.amount + " " + items.name;
+                Crafting_Profit_Resources.Items.Add(add);
+            }
+            totalressources = null;
+        }
+
+        private void Crafting_Profit_List_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            for (int ix = 0; ix < Crafting_Profit_List.Items.Count; ++ix)
+                if (ix != e.Index) Crafting_Profit_List.SetItemChecked(ix, false);
+        }
+
+        private void Crafting_Recipes_Delete_Recipe_Click(object sender, EventArgs e)
+        {
+            RecipeItemsTop.Remove((RecipeItem)Crafting_Recipes_Recipe.SelectedItem);
+            Crafting_Recipes_Recipe.Items.Remove(Crafting_Recipes_Recipe.SelectedItem);
+        }
+
+        private void DataEntry_Delete_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void DeleteAuctions_Click(object sender, EventArgs e)
+        {
+            if (Control.ModifierKeys.ToString().Contains("Control"))
+            {
+                foreach (var item in AuctionItemsToDelete.CheckedItems)
+                {
+                    var items = AuctionItemsTop.Where(x => x.itemName.ToLower() == item.ToString().ToLower());
+                    List<AuctionItem> auctionstoremove = new List<AuctionItem>();
+                    foreach (var subitem in items)
+                    {
+                        auctionstoremove.Add(subitem);
+
+                    }
+                    foreach (AuctionItem subitem in auctionstoremove)
+                    {
+                        AuctionItemsTop.Remove(subitem);
+                    }
+                    ItemNameComboBox.Items.Remove(ItemNameComboBox.SelectedItem);
+                    Measurment.Items.Remove(ItemNameComboBox.SelectedItem);
+                }
+                
+            }
+            else
+            {
+                MessageBox.Show("To completely delete all items of this type from the database press STRG/CTRL while pressing the Delete button");
+            }
+            
         }
     }
 }

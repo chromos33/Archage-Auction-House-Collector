@@ -113,9 +113,9 @@ namespace Archage_Auction_House_Collector
                     if(_inventory.amount > Amount)
                     {
                         inventoryfound = true;
-                        if (_inventory.priceincopper() < auctionprice)
+                        if (_inventory.priceincopper() < inventoryprice)
                         {
-                            auctionprice = _inventory.priceincopper();
+                            inventoryprice = _inventory.priceincopper();
                         }
                     }
                 }
@@ -154,14 +154,97 @@ namespace Archage_Auction_House_Collector
                 _craftingitem.name = Name;
                 _craftingitem.aquirementtype = aquirement;
                 upwarditem.CraftingItems.Add(_craftingitem);
-                
             }
             else
             {
+                foreach(RecipeItem recipeitem in SubItems)
+                {
+                    RecipeSummaryItem subsummaryitem = recipeitem.CheapestWayObtaining(DB, InventoryDB, _laborcost);
+
+                    int aquirement = 0;
+                    var auctionresult = DB.Where(x => x.itemName == recipeitem.Name).Where(x => x.TimeStamp > Timestamp(60 * 60 * 24 * 14));
+                    int auctionprice = 999999999;
+                    bool auctionfound = false;
+                    foreach (AuctionItem _auctionitem in auctionresult)
+                    {
+                        auctionfound = true;
+                        if (_auctionitem.BuyoutPrice < auctionprice)
+                        {
+                            auctionprice = _auctionitem.BuyoutPrice;
+                        }
+                    }
+                    var inventoryresult = InventoryDB.Where(x => x.itemname == recipeitem.Name);
+                    int inventoryprice = 999999999;
+                    bool inventoryfound = false;
+                    foreach (InventoryItem _inventory in inventoryresult)
+                    {
+                        if (_inventory.amount > Amount)
+                        {
+                            inventoryfound = true;
+                            if (_inventory.priceincopper() < auctionprice)
+                            {
+                                inventoryprice = _inventory.priceincopper();
+                            }
+                        }
+                    }
+                    bool auctionwon = false;
+                    if(auctionfound)
+                    {
+                        if(auctionprice > (subsummaryitem.totalprice+subsummaryitem.totallabor*_laborcost))
+                        {
+
+                        }
+                        else
+                        {
+                            auctionwon = true;
+                        }
+                    }
+                    bool inventorywon = false;
+                    if (inventoryfound)
+                    {
+                        if(inventoryprice > (subsummaryitem.totalprice + subsummaryitem.totallabor * _laborcost))
+                        {
+
+                        }
+                        else
+                        {
+                            inventorywon = true;
+                        }
+                    }
+                    if(inventoryfound && auctionfound && inventorywon && auctionwon)
+                    {
+                        if(inventoryprice > auctionprice)
+                        {
+                            inventorywon = false;
+                        }
+                        else
+                        {
+                            auctionwon = false;
+                        }
+                    }
+                    if(auctionwon)
+                    {
+                        upwarditem.totalprice += auctionprice * recipeitem.Amount;
+                        upwarditem.CombineSummaryItem(subsummaryitem);
+                    }
+                    if(inventorywon)
+                    {
+                        upwarditem.totalprice += inventoryprice * recipeitem.Amount;
+                        upwarditem.CombineSummaryItem(subsummaryitem);
+                    }
+                    if(!auctionwon && !inventorywon)
+                    {
+                        upwarditem.totalprice += subsummaryitem.totalprice;
+                        upwarditem.CombineSummaryItem(subsummaryitem);
+                    }
+                }
                 // do the rest (only ever use 1 RecipeSummaryItem)(return it but then take it appart and add to the "parent" recipesummaryitem)
             }
             return upwarditem;
         }
+
+        
+
         public int Timestamp(int deduct = 0)
         {
             return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds - deduct;
@@ -169,6 +252,34 @@ namespace Archage_Auction_House_Collector
     }
     public class RecipeSummaryItem
     {
+        public void CombineSummaryItem(RecipeSummaryItem item)
+        {
+            totallabor += item.totallabor;
+            totalprice += item.totalprice;
+            foreach(RecipeCraftingItems subcraftingitem  in item.CraftingItems)
+            {
+                bool contained = false;
+
+                foreach(RecipeCraftingItems craftingitem in CraftingItems)
+                {
+                    if(craftingitem.name == subcraftingitem.name)
+                    {
+                        
+                        contained = true;
+                        craftingitem.amount += subcraftingitem.amount;
+                    }
+                }
+                if(!contained)
+                {
+                    CraftingItems.Add(subcraftingitem);
+                }
+            }
+        }
+        public string name
+        {
+            get;
+            set;
+        }
         public RecipeSummaryItem()
         {
             CraftingItems = new List<RecipeCraftingItems>();
@@ -187,6 +298,19 @@ namespace Archage_Auction_House_Collector
         {
             get;
             set;
+        }
+        public double profitmargin
+        {
+            get;
+            set;
+        }
+        public override string ToString()
+        {
+            
+            double newCopper = totalprice % 100;
+            double newSilver = Convert.ToInt32((totalprice / 100)) % 100;
+            double newGold = Convert.ToInt32((totalprice / 100 / 100));
+            return name + ": ProductionCost= " + newGold + " g "+newSilver+" s "+newCopper+" c ProfitMargin= "+ profitmargin+" %";
         }
 
     }

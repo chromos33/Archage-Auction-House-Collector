@@ -42,12 +42,17 @@ namespace Archage_Auction_House_Collector
         }
         public override string ToString()
         {
-            int copperprice = gold * 100 * 100 + silver * 100 + copper;
-            int priceper = copperprice / amount;
-            double newCopper = priceper % 100;
-            double newSilver = Convert.ToInt32((priceper / 100)) % 100;
-            double newGold = Convert.ToInt32((priceper / 100 / 100));
-            return itemname +" "+amount+" pieces @ "+ newGold + "g " + newSilver + "s "+ newCopper + "c ";
+            if(amount > 0)
+            {
+                int copperprice = gold * 100 * 100 + silver * 100 + copper;
+                int priceper = copperprice / amount;
+                double newCopper = priceper % 100;
+                double newSilver = Convert.ToInt32((priceper / 100)) % 100;
+                double newGold = Convert.ToInt32((priceper / 100 / 100));
+                return itemname + " " + amount + " pieces @ " + newGold + "g " + newSilver + "s " + newCopper + "c ";
+            }
+            return "";
+            
         }
         public void converttotalcopper(int totalcopper)
         {
